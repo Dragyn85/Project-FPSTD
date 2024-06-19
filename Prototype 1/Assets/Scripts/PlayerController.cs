@@ -7,7 +7,6 @@ public class PlayerController : MonoBehaviour
     public float runSpeed = 4.0f;
     public Rigidbody rb;
 
-
     public Transform cameraTransform;
     public float pitch;
     public float mouseSensitivity = 3.0f;

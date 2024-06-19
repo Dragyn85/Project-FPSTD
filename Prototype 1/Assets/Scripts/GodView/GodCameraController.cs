@@ -18,6 +18,7 @@ public class GodCameraController : MonoBehaviour, PlayerInputs.IGodModeActions
 
     void Start()
     {
+        FindFirstObjectByType<PlacablePlacer>().SetPlayerInputs(playerInputs);
         // Store the initial position of the camera
         initialPosition = cameraTargetTransform.position;
         CMcamera = GetComponentInChildren<CinemachineCamera>();
