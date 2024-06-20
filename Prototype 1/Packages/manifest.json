@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "com.davidhopetech.core.dependency": "file:D:/Git Hub (D drive)/_Daves_Custom_Packages/Daves Custom Packages/Assets/com.davidhopetech.core",
+    "com.davidhopetech.tools.dependency": "file:D:/Git Hub (D drive)/_Daves_Custom_Packages/Daves Custom Packages/Assets/com.davidhopetech.tools",
+    "com.davidhopetech.vr.dependency": "file:D:/Git Hub (D drive)/_Daves_Custom_Packages/Daves Custom Packages/Assets/com.davidhopetech.vr",
     "com.unity.ai.navigation": "2.0.0",
     "com.unity.cinemachine": "3.1.0",
     "com.unity.collab-proxy": "2.3.1",
@@ -11,6 +14,7 @@
     "com.unity.timeline": "1.8.6",
     "com.unity.ugui": "2.0.0",
     "com.unity.visualscripting": "1.9.4",
+    "com.unity.xr.openxr": "1.11.0",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",

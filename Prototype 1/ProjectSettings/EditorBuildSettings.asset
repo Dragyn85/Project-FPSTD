@@ -6,8 +6,13 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/TD Scene one (David).unity
+    guid: 1d7b480254861e946b966259595f664b
+  - enabled: 1
     path: Assets/Scenes/FPS Sample Scene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: fd859f78900d5a24d85156f0795c6f3d, type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 27676592a5f6e244bbc242cfe0f19f34, type: 2}
   m_UseUCBPForAssetBundles: 0
