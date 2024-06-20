@@ -19,7 +19,8 @@ using CodeMonkey.Utils;
  * Player movement with Arrow keys
  * Attack with Space
  * */
-public class Player : MonoBehaviour {
+public class Player : MonoBehaviour
+{
     
     public static Player Instance { get; private set; }
 
@@ -32,11 +33,13 @@ public class Player : MonoBehaviour {
     private State state;
     private Inventory inventory;
 
-    private enum State {
+    private enum State
+    {
         Normal,
     }
 
-    private void Awake() {
+    private void Awake()
+    {
         Instance = this;
         playerBase = gameObject.GetComponent<Player_Base>();
         SetStateNormal();
@@ -46,89 +49,113 @@ public class Player : MonoBehaviour {
         uiInventory.SetInventory(inventory);
     }
 
-    private void OnTriggerEnter2D(Collider2D collider) {
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
         ItemWorld itemWorld = collider.GetComponent<ItemWorld>();
-        if (itemWorld != null) {
+        if (itemWorld != null)
+        {
             // Touching Item
             inventory.AddItem(itemWorld.GetItem());
             itemWorld.DestroySelf();
         }
     }
 
-    private void UseItem(Item item) {
-        switch (item.itemType) {
-        case Item.ItemType.HealthPotion:
-            FlashGreen();
-            inventory.RemoveItem(new Item { itemType = Item.ItemType.HealthPotion, amount = 1 });
-            break;
-        case Item.ItemType.ManaPotion:
-            FlashBlue();
-            inventory.RemoveItem(new Item { itemType = Item.ItemType.ManaPotion, amount = 1 });
-            break;
+    private void UseItem(Item item)
+    {
+        switch (item.itemType)
+        {
+            case Item.ItemType.HealthPotion:
+                FlashGreen();
+                inventory.RemoveItem(new Item { itemType = Item.ItemType.HealthPotion, amount = 1 });
+                break;
+
+            case Item.ItemType.ManaPotion:
+                FlashBlue();
+                inventory.RemoveItem(new Item { itemType = Item.ItemType.ManaPotion, amount = 1 });
+                break;
         }
     }
 
-    private void Update() {
-        switch (state) {
-        case State.Normal:
-            HandleMovement();
-            break;
+    private void Update()
+    {
+        switch (state)
+        {
+            case State.Normal:
+                HandleMovement();
+                break;
         }
     }
     
-    private void SetStateNormal() {
+    private void SetStateNormal()
+    {
         state = State.Normal;
     }
 
-    private void HandleMovement() {
+    private void HandleMovement()
+    {
         float moveX = 0f;
         float moveY = 0f;
         
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) {
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+        {
             moveY = +1f;
         }
-        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) {
+        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+        {
             moveY = -1f;
         }
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) {
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        {
             moveX = -1f;
         }
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) {
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        {
             moveX = +1f;
         }
 
         Vector3 moveDir = new Vector3(moveX, moveY).normalized;
         bool isIdle = moveX == 0 && moveY == 0;
-        if (isIdle) {
+        
+        if (isIdle)
+        {
             playerBase.PlayIdleAnim();
-        } else {
+            
+        }
+        else
+        {
             playerBase.PlayMoveAnim(moveDir);
-            transform.position += moveDir * SPEED * Time.deltaTime;
+            transform.position += moveDir * (SPEED * Time.deltaTime);
         }
     }
 
-    private void DamageFlash() {
+    private void DamageFlash()
+    {
         materialTintColor.SetTintColor(new Color(1, 0, 0, 1f));
     }
 
-    public void DamageKnockback(Vector3 knockbackDir, float knockbackDistance) {
+    public void DamageKnockback(Vector3 knockbackDir, float knockbackDistance)
+    {
         transform.position += knockbackDir * knockbackDistance;
         DamageFlash();
     }
 
-    public Vector3 GetPosition() {
+    public Vector3 GetPosition()
+    {
         return transform.position;
     }
 
-    public void FlashGreen() {
+    public void FlashGreen()
+    {
         materialTintColor.SetTintColor(new Color(0, 1, 0, 1));
     }
 
-    public void FlashRed() {
+    public void FlashRed()
+    {
         materialTintColor.SetTintColor(new Color(1, 0, 0, 1));
     }
 
-    public void FlashBlue() {
+    public void FlashBlue()
+    {
         materialTintColor.SetTintColor(new Color(0, 0, 1, 1));
     }
         

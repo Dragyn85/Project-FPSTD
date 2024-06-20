@@ -1,27 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using CodeMonkey.Utils;
 using TMPro;
 
-public class UI_Inventory : MonoBehaviour {
+public class UI_Inventory : MonoBehaviour
+{
 
     private Inventory inventory;
     private Transform itemSlotContainer;
     private Transform itemSlotTemplate;
     private Player player;
 
-    private void Awake() {
+    private void Awake()
+    {
         itemSlotContainer = transform.Find("itemSlotContainer");
         itemSlotTemplate = itemSlotContainer.Find("itemSlotTemplate");
     }
 
-    public void SetPlayer(Player player) {
+    public void SetPlayer(Player player)
+    {
         this.player = player;
     }
 
-    public void SetInventory(Inventory inventory) {
+    public void SetInventory(Inventory inventory)
+    {
         this.inventory = inventory;
 
         inventory.OnItemListChanged += Inventory_OnItemListChanged;
@@ -29,12 +31,15 @@ public class UI_Inventory : MonoBehaviour {
         RefreshInventoryItems();
     }
 
-    private void Inventory_OnItemListChanged(object sender, System.EventArgs e) {
+    private void Inventory_OnItemListChanged(object sender, System.EventArgs e)
+    {
         RefreshInventoryItems();
     }
 
-    private void RefreshInventoryItems() {
-        foreach (Transform child in itemSlotContainer) {
+    private void RefreshInventoryItems()
+    {
+        foreach (Transform child in itemSlotContainer)
+        {
             if (child == itemSlotTemplate) continue;
             Destroy(child.gameObject);
         }
@@ -42,15 +47,22 @@ public class UI_Inventory : MonoBehaviour {
         int x = 0;
         int y = 0;
         float itemSlotCellSize = 75f;
-        foreach (Item item in inventory.GetItemList()) {
+
+        foreach (Item item in inventory.GetItemList())
+        {
             RectTransform itemSlotRectTransform = Instantiate(itemSlotTemplate, itemSlotContainer).GetComponent<RectTransform>();
             itemSlotRectTransform.gameObject.SetActive(true);
             
-            itemSlotRectTransform.GetComponent<Button_UI>().ClickFunc = () => {
+            // We refresh the ACTIONS (delegate functions) that the Item has,
+            // ..for each possible Button: Mouse Right CLick, Left Click, etc.
+            //
+            itemSlotRectTransform.GetComponent<Button_UI>().ClickFunc = () =>
+            {
                 // Use item
                 inventory.UseItem(item);
             };
-            itemSlotRectTransform.GetComponent<Button_UI>().MouseRightClickFunc = () => {
+            itemSlotRectTransform.GetComponent<Button_UI>().MouseRightClickFunc = () =>
+            {
                 // Drop item
                 Item duplicateItem = new Item { itemType = item.itemType, amount = item.amount };
                 inventory.RemoveItem(item);
@@ -62,14 +74,24 @@ public class UI_Inventory : MonoBehaviour {
             image.sprite = item.GetSprite();
 
             TextMeshProUGUI uiText = itemSlotRectTransform.Find("amountText").GetComponent<TextMeshProUGUI>();
-            if (item.amount > 1) {
+            
+            // If the amount of items reaches one (1): don't show any number (or hide the TextMeshProUI uiText Object).
+            //
+            if (item.amount > 1)
+            {
                 uiText.SetText(item.amount.ToString());
-            } else {
+            }
+            else
+            {
                 uiText.SetText("");
             }
 
             x++;
-            if (x >= 4) {
+            // Todo: Be careful with this Hard-code values:  Use attributes in the class instead
+            // ...(these are the UI dimensions of the Inventory UI). Rows = 2 = y, Columns = 4 = x.
+            //
+            if (x >= 4)
+            {
                 x = 0;
                 y++;
             }

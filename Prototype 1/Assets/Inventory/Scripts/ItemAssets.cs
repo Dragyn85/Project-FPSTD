@@ -1,12 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class ItemAssets : MonoBehaviour {
+/// <summary>
+/// This is a Singleton class, that handles a reference to all the assets that we need in our scene's UI,
+/// ...for the Inventory System to work.
+/// </summary>
+public class ItemAssets : MonoBehaviour
+{
 
     public static ItemAssets Instance { get; private set; }
 
-    private void Awake() {
+    private void Awake()
+    {
         Instance = this;
     }
 
