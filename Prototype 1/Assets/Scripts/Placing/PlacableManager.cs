@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using Screen = UnityEngine.Device.Screen;
-
-public class PlacablePlacer : MonoBehaviour
+public class PlacableManager : MonoBehaviour
 {
     private Placeable placeable;
     private bool isPlacing;
     private PlayerInputs playerInputs;
 
     [SerializeField] private Placeable placeableInstance;
+    [SerializeField] private bool isDebugging;
 
     public void SetPlayerInputs(PlayerInputs playerInputs)
     {
@@ -22,7 +22,7 @@ public class PlacablePlacer : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (isDebugging && Input.GetKeyDown(KeyCode.P))
         {
             StartPlacement(placeableInstance);
         }

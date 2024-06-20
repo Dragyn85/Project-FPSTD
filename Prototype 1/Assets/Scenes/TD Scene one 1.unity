@@ -961,6 +961,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   placeableInstance: {fileID: 669202348}
+  isDebugging: 0
 --- !u!1001 &9145364160141422495
 PrefabInstance:
   m_ObjectHideFlags: 0
