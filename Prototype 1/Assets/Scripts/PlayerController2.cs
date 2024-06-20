@@ -19,16 +19,11 @@ public class PlayerController2 : MonoBehaviour
     public bool fpsMode = true;
     private PlayerInputs playerInputs;
 
-    [SerializeField] GodCameraController godCameraController;
 
-    //[SerializeField] InputActionAsset InputAction;
     void Start()
     {
         playerInputs = new PlayerInputs();
         
-        playerInputs.GodMode.SetCallbacks(godCameraController);
-
-        godCameraController.SetInputs(playerInputs);
         playerInputs.FPS.Enable();
         rb = GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
@@ -48,14 +43,11 @@ public class PlayerController2 : MonoBehaviour
             {
                 playerInputs.FPS.Enable();
                 playerInputs.GodMode.Disable();
-                godCameraController.Enable(false);
-
             }
             else
             {
                 playerInputs.GodMode.Enable();
                 playerInputs.FPS.Disable();
-                godCameraController.Enable(true);
             }
 
         }
@@ -77,7 +69,6 @@ public class PlayerController2 : MonoBehaviour
         var mouseY = inputs.y * mouseSensitivity;
 
 
-        //var newRotation = transform.rotation * Quaternion.Euler(0, mouseX, 0);
         transform.Rotate(Vector3.up, mouseX);
 
         pitch -= mouseY;
@@ -99,7 +90,4 @@ public class PlayerController2 : MonoBehaviour
 
         rb.linearVelocity = newVelocity;
     }
-
-
-
 }
