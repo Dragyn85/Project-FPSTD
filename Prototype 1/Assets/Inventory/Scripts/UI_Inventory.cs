@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using CodeMonkey.Utils;
 using TMPro;
 
+/// <summary>
+/// Todo: Remove the hard-coded values.
+/// </summary>
 public class UI_Inventory : MonoBehaviour
 {
 
