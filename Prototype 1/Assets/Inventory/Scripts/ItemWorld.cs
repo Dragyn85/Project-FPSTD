@@ -7,7 +7,9 @@ using TMPro;
 using CodeMonkey.Utils;
 
 /// <summary>
-/// Logic for handling the Items' "Visual behaviour" (UI feedback mostly), and setting in a Scene (level).
+/// Logic for handling the Items' "Visual behaviour" (2D Sprites on the Scene - mostly), and setting in a Scene (level).
+/// 
+/// It's the 'Code Behind' for the Scene Level. It also spawns the Items into the World.
 /// </summary>
 public class ItemWorld : MonoBehaviour
 {
@@ -39,13 +41,13 @@ public class ItemWorld : MonoBehaviour
 
     private Item item;
     private SpriteRenderer spriteRenderer;
-    private Light2D lightForUI;
+    private Light2D light2D;
     private TextMeshPro textMeshPro;
 
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        lightForUI = transform.Find("Light").GetComponent<Light2D>();
+        light2D = transform.Find("Light").GetComponent<Light2D>();
         textMeshPro = transform.Find("Text").GetComponent<TextMeshPro>();
     }
 
@@ -53,7 +55,7 @@ public class ItemWorld : MonoBehaviour
     {
         this.item = item;
         spriteRenderer.sprite = item.GetSprite();
-        lightForUI.color = item.GetColor();
+        light2D.color = item.GetColor();
         if (item.amount > 1)
         {
             textMeshPro.SetText(item.amount.ToString());
