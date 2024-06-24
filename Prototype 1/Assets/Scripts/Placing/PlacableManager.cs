@@ -1,62 +1,119 @@
 ﻿using UnityEngine;
-using Screen = UnityEngine.Device.Screen;
+using UnityEngine.Serialization;
+
 public class PlacableManager : MonoBehaviour
 {
     private Placeable placeable;
     private bool isPlacing;
     private PlayerInputs playerInputs;
 
-    [SerializeField] private Placeable placeableInstance;
+    IPlace placeStrategy;
+
+    [FormerlySerializedAs("debugPlacable")]
+    [Header("Debugging")]
+    [SerializeField] private Placeable debugPlacableTurret;
+    [SerializeField] private Placeable debugPlacableWall;
     [SerializeField] private bool isDebugging;
+    [SerializeField] private KeyCode placeTurret = KeyCode.Alpha3;
+    [SerializeField] private KeyCode placeWall = KeyCode.Alpha4;
+    
+
+    
+    private void Awake()
+    {
+        placeStrategy = new DesktopPlacementStartegy();
+    }
 
     public void SetPlayerInputs(PlayerInputs playerInputs)
     {
         this.playerInputs = playerInputs;
     }
 
-    public void StartPlacement(Placeable placeable)
+    void StartPlacement(Placeable placeable)
     {
-        this.placeable = placeable;
+        if (isPlacing)
+        {
+            return;
+        }
+
+        this.placeable = Instantiate(placeable);
         isPlacing = true;
     }
 
+
     private void LateUpdate()
     {
-        if (isDebugging && Input.GetKeyDown(KeyCode.P))
-        {
-            StartPlacement(placeableInstance);
-        }
+        HandleDebugging();
 
         if (!isPlacing)
         {
             return;
         }
 
-        //make a ray from the center of the screen in the forward direction
-        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width/2, Screen.height/2));
+        UpdatePlaceablePosition();
+        HandlePlaceableRotation();
+        HandleFinalPositioning();
+        HandlePlacementCancelation();
+    }
+
+    private void HandleDebugging()
+    {
+        if (!isDebugging) return;
         
-        if (Physics.Raycast(ray, out var hit))
+        if (Input.GetKeyDown(placeTurret))
         {
-            placeable.SetPlaceHolderPosition(hit.point);
-            bool isValid = placeable.IsValidPlacement(hit.point);
+            StartPlacement(debugPlacableTurret);
+        }
 
-            if (isValid)
-            {
-                placeable.SetPlaceHolderColor(Color.green);
-            }
-            else
-            {
-                placeable.SetPlaceHolderColor(Color.red);
-            }
+        if (Input.GetKeyDown(placeWall))
+        {
+            StartPlacement(debugPlacableWall);
+        }
+    }
 
-            if (Input.GetMouseButtonDown(0))
+    private void HandlePlaceableRotation()
+    {
+        if(placeStrategy.ShouldRotate())
+        {
+            placeable.Rotate();
+        }
+    }
+
+    private void HandlePlacementCancelation()
+    {
+        if (placeStrategy.ShouldCancelPlacement())
+        {
+            Destroy(placeable.gameObject);
+            isPlacing = false;
+            placeable = null;
+        }
+    }
+
+    private void HandleFinalPositioning()
+    {
+        if (placeStrategy.ShouldTryPlace())
+        {
+            if (placeable.TryPlace())
             {
-                if (placeable.TryPlace())
-                {
-                    isPlacing = false;
-                    Destroy(placeableInstance.gameObject);
-                }
+                isPlacing = false;
+                Destroy(placeable.gameObject);
             }
+        }
+    }
+
+    private void UpdatePlaceablePosition()
+    {
+        var pos = placeStrategy.GetNewPlaceablePosition();
+        placeable.SetPlaceHolderPosition(pos);
+        bool isValid = placeable.IsValidPlacement(pos);
+
+        if (isValid)
+        {
+            placeable.SetPlaceHolderColor(Color.green);
+        }
+        else
+        {
+            placeable.SetPlaceHolderColor(Color.red);
         }
     }
 }

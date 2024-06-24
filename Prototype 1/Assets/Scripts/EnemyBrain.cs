@@ -19,6 +19,7 @@ public class EnemyBrain : MonoBehaviour
     {
         GetComponent<NavMeshAgent>().isStopped = true;
         GetComponentInChildren<Animator>().SetTrigger("Die");
+        GetComponent<Collider>().enabled = false;
         Destroy(gameObject, 10);
     }
 }

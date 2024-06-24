@@ -10,7 +10,8 @@ public class GuardTower : MonoBehaviour
     float nextAttackTime = 0;
 
     Transform playerBase;
-    Transform target;
+    Health target;
+    [SerializeField] float attackSpeed = 0.2f;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform gunPointTransform;
 
@@ -29,7 +30,7 @@ public class GuardTower : MonoBehaviour
 
 
         // Face the target
-        transform.LookAt(target.position);
+        transform.LookAt(target.transform.position);
 
         if (CanAttack())
         {
@@ -47,14 +48,12 @@ public class GuardTower : MonoBehaviour
         {
             return false;
         }
-
-        if (Vector3.Distance(transform.position, target.position) < radius && Time.time > nextAttackTime)
-        {
-            return true;
-        }
-
-        if (Physics.Raycast(gunPointTransform.position, (target.position - gunPointTransform.position).normalized,
-                out RaycastHit hit, radius))
+        
+        if (Time.time > nextAttackTime 
+            && Physics.Raycast(gunPointTransform.position, 
+                (target.transform.position - gunPointTransform.position).normalized,
+                out RaycastHit hit, radius)
+            && Vector3.Distance(transform.position, target.transform.position) < radius)
         {
             if (hit.transform == target)
             {
@@ -68,7 +67,7 @@ public class GuardTower : MonoBehaviour
     private void Shoot()
     {
         Instantiate(bulletPrefab, gunPointTransform.position, gunPointTransform.rotation);
-        nextAttackTime = Time.time + 0.5f;
+        nextAttackTime = Time.time + attackSpeed;
     }
 
     private void UpdateTargets()
@@ -89,7 +88,7 @@ public class GuardTower : MonoBehaviour
             {
                 if (collider.TryGetComponent<IDamagable>(out var damagable))
                 {
-                    target = collider.transform;
+                    target = collider.transform.GetComponent<Health>();
                     break;
                 }
             }

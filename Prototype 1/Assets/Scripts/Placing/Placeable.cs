@@ -9,7 +9,7 @@ public class Placeable : MonoBehaviour
     [SerializeField] GameObject placeablePrefab;
     [SerializeField] GameObject placeHolder;
     
-    [SerializeField] private List<Validater> validaters;
+    [SerializeField] private Validater[] validaters;
     
     Dictionary<Renderer,Material> RendererMaterials = new Dictionary<Renderer, Material>();
     
@@ -57,7 +57,7 @@ public class Placeable : MonoBehaviour
 
     private void Awake()
     {
-        validaters = GetComponents<Validater>().ToList();
+        validaters = GetComponentsInChildren<Validater>().OrderBy(t => t.checkOrder).ToArray();
         //Cashe all renderers materials
         var renderers = GetComponentsInChildren<Renderer>();
         foreach (var renderer in renderers)
@@ -68,5 +68,10 @@ public class Placeable : MonoBehaviour
             }
         }
 
+    }
+
+    public void Rotate()
+    {
+        transform.Rotate(Vector3.up, 90);
     }
 }

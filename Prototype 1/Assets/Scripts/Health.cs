@@ -16,6 +16,7 @@ public class Health : MonoBehaviour, IDamagable
         if (currentHealth <= 0)
         {
             OnDeath?.Invoke();
+            Destroy(this);
         }
     }
     
