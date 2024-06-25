@@ -51,11 +51,17 @@ public class ItemSlot : MonoBehaviour, IDropHandler /*, IPointerEnterHandler, IP
     
         if (eventData.pointerDrag != null)
         {
+
+            // 1- Place the "UI Element" correctly inside the "UI Slot-Element" 
+            //
             eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
+
+            // 2- Get the Reference to the "UI Slot-Element" (is this class-object) and trigger an Update / on the Inventory Database in Memory.           
+            //
         }
         else
         {
-            Debug.LogWarning($"Error on OnDrop");
+            Debug.LogWarning($"Error on --->OnDrop");
         }
         
     }

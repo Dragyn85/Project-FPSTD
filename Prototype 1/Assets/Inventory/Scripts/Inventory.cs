@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 /// <summary>
-/// This class handles an Inventory System.
+/// This is the main class, that handles an Inventory System.
 /// </summary>
 public class Inventory 
 {
