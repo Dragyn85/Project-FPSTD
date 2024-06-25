@@ -56,8 +56,24 @@ public class ItemSlot : MonoBehaviour, IDropHandler /*, IPointerEnterHandler, IP
             //
             eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
 
+            
             // 2- Get the Reference to the "UI Slot-Element" (is this class-object) and trigger an Update / on the Inventory Database in Memory.           
             //
+            ItemWorld myItemWorldRepresentation = eventData.pointerDrag.GetComponent<ItemWorld>();
+            
+            
+            // THIS PART NEEDS REWORKKKKKKKKKKKKKKKKKKKK::   #ACA_QUEDE 
+            //
+            if (myItemWorldRepresentation)
+            {
+                Debug.Log($"---> OnDrop: myItemWorldRepresentation");
+                
+                // Temporary test: add a new Item like this one.
+                //
+                Inventory.Instance.AddItem( myItemWorldRepresentation.GetItem() );
+                
+                
+            }//End if (myItemWorldRepresentation)
         }
         else
         {

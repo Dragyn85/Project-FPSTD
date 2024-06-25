@@ -7,6 +7,10 @@ using System.Collections.Generic;
 public class Inventory 
 {
 
+    // Todo: Change this Temporary approach: for now ti is a "Singleton".
+    //
+    public static Inventory Instance { get; private set; }
+    
     public event EventHandler OnItemListChanged;
 
     private List<Item> itemList;
@@ -14,6 +18,10 @@ public class Inventory
 
     public Inventory(Action<Item> useItemAction)
     {
+        // Todo: Change this. Singleton approach.
+        //
+        Instance = this;
+        
         this.useItemAction = useItemAction;
         itemList = new List<Item>();
 

@@ -12,6 +12,7 @@ public class Item       // Todo: IStackable, IDraggable, etc..
 
     public enum ItemType
     {
+        None,   /* Use this one for declaring "Empty Spaces / Slots" in the "GUI's Inventory Window". */
         Sword,
         HealthPotion,
         ManaPotion,

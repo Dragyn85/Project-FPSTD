@@ -23,9 +23,13 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
     [SerializeField]
     private RectTransform _rectTransform;
    
-    [Tooltip("GUI Canvas Group: for blocking rayscast (i.e.: Mouse Pointer interaction) to this Item momentarily.")]
+    [Tooltip("GUI Canvas Group: for blocking Rayscast (i.e.: Mouse Pointer interaction) to this Item momentarily.")]
     [SerializeField]
     private CanvasGroup _canvasGroup;
+
+    [Tooltip("[READONLY: For Debug Purposes] Last 2D Position of the Item (Rect Transform), before the 'Drag And Drop' process starts.")]
+    [SerializeField]
+    private Vector2 _last2DPositionOfUIElementBeforeDragNDrop = new Vector2(0, 0);
 
 
     #endregion Attributes
@@ -131,11 +135,19 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
         //
         _canvasGroup.blocksRaycasts = true;
         
+        // * Place the UI Element on its previous position, after some time has passed:
+        //
+        //_rectTransform.anchoredPosition = _last2DPositionOfUIElementBeforeDragNDrop;
+        
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         Debug.Log($"OnPointerDown");
+        
+        // 1- Save the initial Position of the UI Element:
+        //
+        _last2DPositionOfUIElementBeforeDragNDrop = _rectTransform.anchoredPosition;
 
     }
     

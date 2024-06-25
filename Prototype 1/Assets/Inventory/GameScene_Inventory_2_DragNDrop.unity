@@ -2513,6 +2513,7 @@ MonoBehaviour:
   _canvas: {fileID: 554223380}
   _rectTransform: {fileID: 0}
   _canvasGroup: {fileID: 0}
+  _last2DPositionOfUIElementBeforeDragNDrop: {x: 0, y: 0}
 --- !u!225 &1028955031
 CanvasGroup:
   m_ObjectHideFlags: 0
