@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 
-public class ItemSlot : MonoBehaviour, IDropHandler /*, IPointerEnterHandler, IPointerExitHandler */ 
+public class ItemDropOnSlot : MonoBehaviour, IDropHandler /*, IPointerEnterHandler, IPointerExitHandler */ 
 {
 
     #region Attributes
@@ -51,36 +51,41 @@ public class ItemSlot : MonoBehaviour, IDropHandler /*, IPointerEnterHandler, IP
     
         if (eventData.pointerDrag != null)
         {
+            // 0- Define GameObjects:
+            //    .1- ITEM
+            //
+            GameObject myUIItemDragged = eventData.pointerDrag.gameObject;
+            UI_Slot myUIItemDraggedUISlot = myUIItemDragged.GetComponent<UI_Slot>();
+            UI_Item myUIItemDraggedUIItem = myUIItemDragged.GetComponent<UI_Item>();
+            
+            //    .2- Landing:  UI-Slot
+            //
+            GameObject myUISlotLanding = this.gameObject;
+            UI_Slot myUISlotLandingUISlot = myUISlotLanding.GetComponent<UI_Slot>();
+            UI_Item myUISlotLandingUIItem = myUISlotLanding.GetComponent<UI_Item>();
 
-            // 1- Place the "UI Element" correctly inside the "UI Slot-Element" 
+            // 1- Place the ITEM ("UI Element") correctly inside the "UI Slot-Element" 
             //
-            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
+            myUIItemDragged.GetComponent<RectTransform>().anchoredPosition = myUISlotLanding.GetComponent<RectTransform>().anchoredPosition;
 
+            // Update GUI Code Behind:  UI_Item, UI_Slot, UI_Inventory
             
-            // 2- Get the Reference to the "UI Slot-Element" (is this class-object) and trigger an Update / on the Inventory Database in Memory.           
+            // 2- Update Connections:
+            // Update: UI_Slot  (of previous:  UI_ITEM )  (not having the ITEM anymore)
             //
-            ItemWorld myItemWorldRepresentation = eventData.pointerDrag.GetComponent<ItemWorld>();
+            myUIItemDraggedUIItem.RemoveUIItem( false );
             
-            
-            // THIS PART NEEDS REWORKKKKKKKKKKKKKKKKKKKK::   #ACA_QUEDE 
+            // Update: Landing: UI_Slot   (having a new connection to: the UI_ITEM)
+            // ...rather: Dragged ITEM: update connections to new UI_SLot
             //
-            if (myItemWorldRepresentation)
-            {
-                Debug.Log($"---> OnDrop: myItemWorldRepresentation");
-                
-                // Temporary test: add a new Item like this one.
-                //
-                Inventory.Instance.AddItem( myItemWorldRepresentation.GetItem() );
-                
-                
-            }//End if (myItemWorldRepresentation)
+            myUIItemDraggedUIItem.AddUIItem( myUISlotLandingUISlot );
         }
         else
         {
             Debug.LogWarning($"Error on --->OnDrop");
         }
         
-    }
+    }// End OnDrop()
 
     
     #region other experiments

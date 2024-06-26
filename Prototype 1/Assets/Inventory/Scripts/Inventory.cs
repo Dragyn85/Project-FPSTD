@@ -7,11 +7,20 @@ using System.Collections.Generic;
 public class Inventory 
 {
 
-    // Todo: Change this Temporary approach: for now ti is a "Singleton".
+    // Todo: Change this Temporary approach: for now this is a "Singleton".
     //
     public static Inventory Instance { get; private set; }
-    
-    public event EventHandler OnItemListChanged;
+
+    /// <summary>
+    /// Delegate Function: Observer Patter (this is the "Observed" or "Subject")... adn this is the "Event" to be Fired
+    /// ...whenever the List Items  (Data...) changes.
+    ///
+    /// Previous one:  public event EventHandler OnItemListChanged;
+    /// Parameters:
+    /// bool:  TRUE: ADD......  FALSE: REMOVE from GUI.
+    /// Item:  Item that was: REMOVED / ADDED
+    /// </summary>
+    public event Action<bool, Item> OnItemListChanged;
 
     private List<Item> itemList;
     private Action<Item> useItemAction;
@@ -52,13 +61,19 @@ public class Inventory
             if (!itemAlreadyInInventory)
             {
                 itemList.Add(item);
+                
+                OnItemListChanged?.Invoke(true, item);
             }
         }
         else
         {
             itemList.Add(item);
+            
+            OnItemListChanged?.Invoke(true, item);
         }
-        OnItemListChanged?.Invoke(this, EventArgs.Empty);
+        // Previous: OnItemListChanged?.Invoke(this, EventArgs.Empty);
+        //
+        
     }
 
     public void RemoveItem(Item item)
@@ -77,14 +92,19 @@ public class Inventory
             }
             if (itemInInventory != null && itemInInventory.amount <= 0)
             {
+                
                 itemList.Remove(itemInInventory);
+                
+                OnItemListChanged?.Invoke(false, item);
             }
         }
         else
         {
             itemList.Remove(item);
+            
+            OnItemListChanged?.Invoke(false, item);
         }
-        OnItemListChanged?.Invoke(this, EventArgs.Empty);
+        // Previous:   OnItemListChanged?.Invoke(this, EventArgs.Empty);
     }
 
     public void UseItem(Item item)

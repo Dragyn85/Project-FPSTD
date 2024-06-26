@@ -3,6 +3,8 @@
 /// <summary>
 /// This is a Singleton class, that handles a reference to all the assets (Items' stuff) that we need in our scene's UI,
 /// ...for the Inventory System to work.
+///
+/// It handles the Spawner.
 /// </summary>
 public class ItemAssets : MonoBehaviour
 {
