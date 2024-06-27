@@ -204,8 +204,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item:
-    itemType: 3
-    amount: 1
+    _itemID: 0
+    _itemType: 3
+    _amount: 1
 --- !u!4 &77924530
 Transform:
   m_ObjectHideFlags: 0
@@ -533,8 +534,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item:
-    itemType: 2
-    amount: 1
+    _itemID: 0
+    _itemType: 2
+    _amount: 1
 --- !u!4 &223101138
 Transform:
   m_ObjectHideFlags: 0
@@ -1036,8 +1038,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item:
-    itemType: 3
-    amount: 1
+    _itemID: 0
+    _itemType: 3
+    _amount: 1
 --- !u!4 &530237273
 Transform:
   m_ObjectHideFlags: 0
@@ -1559,8 +1562,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item:
-    itemType: 0
-    amount: 1
+    _itemID: 0
+    _itemType: 0
+    _amount: 1
 --- !u!4 &773585292
 Transform:
   m_ObjectHideFlags: 0
@@ -1789,8 +1793,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item:
-    itemType: 3
-    amount: 5
+    _itemID: 0
+    _itemType: 3
+    _amount: 5
 --- !u!4 &787677286
 Transform:
   m_ObjectHideFlags: 0
@@ -1928,8 +1933,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item:
-    itemType: 3
-    amount: 1
+    _itemID: 0
+    _itemType: 3
+    _amount: 1
 --- !u!4 &810907427
 Transform:
   m_ObjectHideFlags: 0
@@ -2172,8 +2178,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item:
-    itemType: 4
-    amount: 1
+    _itemID: 0
+    _itemType: 4
+    _amount: 1
 --- !u!4 &888447973
 Transform:
   m_ObjectHideFlags: 0
@@ -2275,8 +2282,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item:
-    itemType: 3
-    amount: 10
+    _itemID: 0
+    _itemType: 3
+    _amount: 10
 --- !u!4 &891512498
 Transform:
   m_ObjectHideFlags: 0
@@ -3016,8 +3024,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item:
-    itemType: 1
-    amount: 2
+    _itemID: 0
+    _itemType: 1
+    _amount: 2
 --- !u!4 &1152890550
 Transform:
   m_ObjectHideFlags: 0
@@ -3206,8 +3215,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item:
-    itemType: 4
-    amount: 1
+    _itemID: 0
+    _itemType: 4
+    _amount: 1
 --- !u!4 &1160314173
 Transform:
   m_ObjectHideFlags: 0
@@ -4265,8 +4275,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item:
-    itemType: 2
-    amount: 1
+    _itemID: 0
+    _itemType: 2
+    _amount: 1
 --- !u!4 &1504038316
 Transform:
   m_ObjectHideFlags: 0
@@ -4749,8 +4760,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item:
-    itemType: 3
-    amount: 1
+    _itemID: 0
+    _itemType: 3
+    _amount: 1
 --- !u!4 &1731821930
 Transform:
   m_ObjectHideFlags: 0
@@ -4852,8 +4864,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item:
-    itemType: 0
-    amount: 1
+    _itemID: 0
+    _itemType: 0
+    _amount: 1
 --- !u!4 &1741555393
 Transform:
   m_ObjectHideFlags: 0
@@ -5021,8 +5034,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item:
-    itemType: 1
-    amount: 1
+    _itemID: 0
+    _itemType: 1
+    _amount: 1
 --- !u!4 &1845275448
 Transform:
   m_ObjectHideFlags: 0

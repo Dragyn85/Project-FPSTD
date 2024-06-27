@@ -62,16 +62,25 @@ public class Player : MonoBehaviour
 
     private void UseItem(Item item)
     {
-        switch (item.itemType)
+        switch (item.GetItemType())
         {
+            
             case Item.ItemType.HealthPotion:
                 FlashGreen();
-                inventory.RemoveItem(new Item { itemType = Item.ItemType.HealthPotion, amount = 1 });
+                
+                // ACA_QUEDE
+                
+                Item myItem = inventory.CreateNewItem(Item.ItemType.HealthPotion, 1);
+                inventory.RemoveItem( myItem );
+                    // Before it was:  inventory.RemoveItem(new Item { itemType = Item.ItemType.HealthPotion, amount = 1 });
                 break;
-
+            
             case Item.ItemType.ManaPotion:
                 FlashBlue();
-                inventory.RemoveItem(new Item { itemType = Item.ItemType.ManaPotion, amount = 1 });
+                
+                Item myItem2 = inventory.CreateNewItem(Item.ItemType.ManaPotion, 1);
+                inventory.RemoveItem( myItem2 );
+                    // Before itt was:  inventory.RemoveItem(new Item { itemType = Item.ItemType.ManaPotion, amount = 1 });
                 break;
         }
     }

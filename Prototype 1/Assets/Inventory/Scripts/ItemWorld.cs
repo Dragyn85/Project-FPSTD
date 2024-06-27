@@ -37,6 +37,26 @@ public class ItemWorld : MonoBehaviour
         itemWorld.GetComponent<Rigidbody2D>().AddForce(randomDir * 40f, ForceMode2D.Impulse);
         return itemWorld;
     }
+    
+    /// <summary>
+    /// Throws just one (1) or more... Units: of Item from a given position (maybe the Player's Vector3 position).
+    /// </summary>
+    /// <param name="dropPosition"></param>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    public static ItemWorld DropItem(Vector3 dropPosition, Item item, bool dropJustOneUnitOfItem)
+    {
+        if (dropJustOneUnitOfItem)
+        {
+            
+            item.SetAmount( 1 );
+        }
+        
+        Vector3 randomDir = UtilsClass.GetRandomDir();
+        ItemWorld itemWorld = SpawnItemWorld(dropPosition + randomDir * 8f, item);
+        itemWorld.GetComponent<Rigidbody2D>().AddForce(randomDir * 40f, ForceMode2D.Impulse);
+        return itemWorld;
+    }
 
 
     private Item item;
@@ -56,9 +76,9 @@ public class ItemWorld : MonoBehaviour
         this.item = item;
         spriteRenderer.sprite = item.GetSprite();
         light2D.color = item.GetColor();
-        if (item.amount > 1)
+        if (item.GetAmount() > 1)
         {
-            textMeshPro.SetText(item.amount.ToString());
+            textMeshPro.SetText(item.GetAmount().ToString());
         }
         else
         {
