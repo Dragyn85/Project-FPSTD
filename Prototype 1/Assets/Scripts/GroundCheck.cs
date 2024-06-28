@@ -14,6 +14,8 @@ public class GroundCheck : MonoBehaviour
     public float Slope => slope;
     public bool IsGrounded => isGrounded;
 
+    public float distanceToGround;
+    public float velocity;
     private void Awake()
     {
         var bounds = playerCollider.bounds;
@@ -21,17 +23,21 @@ public class GroundCheck : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         Ray ray = new Ray(transform.position+offset, Vector3.down);
-        if (Physics.Raycast(ray,out var hit,0.1f) && rb.linearVelocity.y <= 0.1f)
+        RaycastHit hit;
+        if (Physics.Raycast(ray,out hit,10f) && rb.linearVelocity.y <= 0.5f)
         {
+            distanceToGround = hit.distance;
             slope = Vector3.Angle(hit.normal, transform.forward)-90;
             isGrounded = true;
+            velocity = rb.linearVelocity.y;
         }
         else
         {
             isGrounded = false;
+            velocity = rb.linearVelocity.y;
         }
     }
 }
