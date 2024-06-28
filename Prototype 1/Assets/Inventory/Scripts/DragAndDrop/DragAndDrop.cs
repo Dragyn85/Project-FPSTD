@@ -11,7 +11,7 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
     #region Attributes
 
     //  CONSTANTS
-    private float _CANVAS_GROUP_ALPHA_SEMITRANSPARENT = 0.5f;
+    private float _CANVAS_GROUP_ALPHA_SEMITRANSPARENT = 0.333f;
 
     // Variables
     
@@ -23,9 +23,9 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
     [SerializeField]
     private RectTransform _rectTransform;
    
-    [Tooltip("GUI Canvas Group: for blocking Rayscast (i.e.: Mouse Pointer interaction) to this Item momentarily.")]
+    [Tooltip("GUI Canvas Group for Parent GameObject of all GameObjects containing UI_ITEM Component: for blocking Raycasts (i.e.: Mouse Pointer interaction) to all 'UI_ITEMS' Item momentarily.")]
     [SerializeField]
-    private CanvasGroup _canvasGroup;
+    private CanvasGroup _canvasGroupOfParentGameObject;
 
     [Tooltip("[READONLY: For Debug Purposes] Last 2D Position of the Item (Rect Transform), before the 'Drag And Drop' process starts.")]
     [SerializeField]
@@ -54,16 +54,18 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
         
         // Get the Canvas Group Component or Add one.
         //
-        _canvasGroup = GetComponent<CanvasGroup>();
+        _canvasGroupOfParentGameObject = GetComponentInParent<CanvasGroup>();
         //
-        // Add one CanvasGroup ?
+        // Add one CanvasGroup ?  (to Parent GameObject that Groups all these ITEMS together)
         //
-        if (_canvasGroup == null)
+        if (_canvasGroupOfParentGameObject == null)
         {
         
-            Debug.LogWarning($"There's no CanvasGroup in this GameObject... for DRAG AND DROP.\n\nThis GameObject is:= {this.name}... Adding one", this);
+            Debug.LogWarning($"There's no CanvasGroup in this GameObject's PARENT (GameObject)... for disabling Raycasts in 'DRAG AND DROP'.\n\nThis GameObject is:= {this.name}... Adding one", this);
             
-            _canvasGroup = gameObject.AddComponent<CanvasGroup>();
+            // Add Component to Parent (GameObject):
+            //
+            _canvasGroupOfParentGameObject = gameObject.transform.parent.gameObject.AddComponent<CanvasGroup>();
         }
 
     }//End Awake
@@ -81,10 +83,20 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
 
 
     #endregion Unity Methods
-    
+
 
     #region My Custom Methods
 
+    #region Getters and Setters
+
+    public Vector2 GetLast2DPositionOfUIElementBeforeDragNDrop()
+    {
+        return this._last2DPositionOfUIElementBeforeDragNDrop;
+    }
+
+    #endregion Getters and Setters
+
+        
     #region Interfaces Methods
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -93,11 +105,11 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
 
         // Make it Semi-Transparent:
         //
-        _canvasGroup.alpha = _CANVAS_GROUP_ALPHA_SEMITRANSPARENT;
+        _canvasGroupOfParentGameObject.alpha = _CANVAS_GROUP_ALPHA_SEMITRANSPARENT;
         
         // Block Interaction with this UI Element:
         //
-        _canvasGroup.blocksRaycasts = false;
+        _canvasGroupOfParentGameObject.blocksRaycasts = false;
     }
 
     /// <summary>
@@ -129,11 +141,11 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
         
         // Make it 100% Opaque again:
         //
-        _canvasGroup.alpha = 1.0f;
+        _canvasGroupOfParentGameObject.alpha = 1.0f;
         
         // UN-Block Interaction with this UI Element:
         //
-        _canvasGroup.blocksRaycasts = true;
+        _canvasGroupOfParentGameObject.blocksRaycasts = true;
         
         // * Place the UI Element on its previous position, after some time has passed:
         //
@@ -148,7 +160,6 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
         // 1- Save the initial Position of the UI Element:
         //
         _last2DPositionOfUIElementBeforeDragNDrop = _rectTransform.anchoredPosition;
-
     }
     
 

@@ -54,36 +54,67 @@ public class ItemDropOnSlot : MonoBehaviour, IDropHandler /*, IPointerEnterHandl
             // 0- Define GameObjects:
             //    .1- ITEM
             //
-            GameObject myUIItemDragged = eventData.pointerDrag.gameObject;
-            UI_Slot myUIItemDraggedUISlot = myUIItemDragged.GetComponent<UI_Slot>();
-            UI_Item myUIItemDraggedUIItem = myUIItemDragged.GetComponent<UI_Item>();
+            GameObject myUIItemDraggedGameObject = eventData.pointerDrag.gameObject;
+            UI_Item myUIItemComponentInDraggedUIItemGameObject = myUIItemDraggedGameObject.GetComponent<UI_Item>();
+            UI_Slot myUISlotInjectionInDraggedUIItemGameObject = myUIItemComponentInDraggedUIItemGameObject.GetUISlot();
             
             //    .2- Landing:  UI-Slot
             //
-            GameObject myUISlotLanding = this.gameObject;
-            UI_Slot myUISlotLandingUISlot = myUISlotLanding.GetComponent<UI_Slot>();
-            UI_Item myUISlotLandingUIItem = myUISlotLanding.GetComponent<UI_Item>();
+            GameObject myUISlotGameObjectReceiverOfDrop = this.gameObject;
+            UI_Slot myUISlotComponentInReceiverGameObject = myUISlotGameObjectReceiverOfDrop.GetComponent<UI_Slot>();
+            UI_Item myUIItemInjectionInReceiverGameObject = myUISlotComponentInReceiverGameObject.GetUI_Item();
 
-            // 1- Place the ITEM ("UI Element") correctly inside the "UI Slot-Element" 
+            // Validation:   Check if UI_SLOT:  Has a connection (dependency Injection) to:  UI_ITEM   (already).
             //
-            myUIItemDragged.GetComponent<RectTransform>().anchoredPosition = myUISlotLanding.GetComponent<RectTransform>().anchoredPosition;
+            if ( myUIItemInjectionInReceiverGameObject == null )
+            {
+                // UI_SLOT is empty:  No connection to:  UI_ITEM.
+                // Let's add the UI_ITEM connection  INJECTION
+                //
+                // 1- Place the ITEM ("UI Element") correctly inside the "UI Slot-Element" 
+                //
+                myUIItemDraggedGameObject.GetComponent<RectTransform>().anchoredPosition = myUISlotComponentInReceiverGameObject.GetComponent<RectTransform>().anchoredPosition;
 
-            // Update GUI Code Behind:  UI_Item, UI_Slot, UI_Inventory
+                // Update GUI Code Behind:  UI_Item, UI_Slot, UI_Inventory
             
-            // 2- Update Connections:
-            // Update: UI_Slot  (of previous:  UI_ITEM )  (not having the ITEM anymore)
-            //
-            myUIItemDraggedUIItem.RemoveUIItem( false );
+                // 2- Update Connections:
+                // Update: UI_Slot  (of previous:  UI_ITEM )  (not having the ITEM anymore)
+                //
+                myUIItemComponentInDraggedUIItemGameObject.RemoveUIItem( false );
             
-            // Update: Landing: UI_Slot   (having a new connection to: the UI_ITEM)
-            // ...rather: Dragged ITEM: update connections to new UI_SLot
-            //
-            myUIItemDraggedUIItem.AddUIItem( myUISlotLandingUISlot );
-        }
+                // Update: Landing: UI_Slot   (having a new connection to: the UI_ITEM)
+                // ...rather: Dragged ITEM: update connections to new UI_SLot
+                //
+                myUIItemComponentInDraggedUIItemGameObject.AddUIItem( myUISlotComponentInReceiverGameObject );
+                
+            }//End if ( myUIItemInjectionInReceiverGameObject == null )
+            else
+            {
+                Debug.LogWarning($"Error on --->OnDrop (cannot DROP UI_ITEM): UI_SLOT is NOT empty:  THERE'S a Previous Connection to a:  UI_ITEM.\n\n * The System will try to place the UI_ITEM in its original Position / UI_Slot.");
+                
+                
+                // Try to place the UI_ITEM in its original Position / UI_Slot.
+                //
+                DragAndDrop uiSLotGameObjectDragAndDrop = myUIItemDraggedGameObject.GetComponent<DragAndDrop>();
+
+                // Validate
+                //
+                if ( uiSLotGameObjectDragAndDrop != null )
+                {
+                    // Place the RectTransform of the UI GameObject in its original Position (x, y, z).
+                    //
+                    myUIItemDraggedGameObject.GetComponent<RectTransform>().anchoredPosition =
+                        uiSLotGameObjectDragAndDrop.GetLast2DPositionOfUIElementBeforeDragNDrop();
+
+                }//End if ( uiSLotGameObjectDragAndDrop != null )
+
+            }//End else of if ( myUIItemInjectionInReceiverGameObject == null )
+        }//End if (eventData.pointerDrag != null)
         else
         {
             Debug.LogWarning($"Error on --->OnDrop");
-        }
+
+        }//End else of if (eventData.pointerDrag != null)
         
     }// End OnDrop()
 
