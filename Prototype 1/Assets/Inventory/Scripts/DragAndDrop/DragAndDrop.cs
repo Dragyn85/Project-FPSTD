@@ -23,6 +23,12 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
     [SerializeField]
     private RectTransform _rectTransform;
    
+    
+    // [Tooltip("GUI Canvas Group for Main Canvas GameObject of all GameObjects in GUI: for blocking Raycasts (i.e.: Mouse Pointer interaction) to all GUI momentarily.")]
+    // [SerializeField]
+    // private CanvasGroup _canvasGroupOnMainCanvasGameObject;
+
+    
     [Tooltip("GUI Canvas Group for Parent GameObject of all GameObjects containing UI_ITEM Component: for blocking Raycasts (i.e.: Mouse Pointer interaction) to all 'UI_ITEMS' Item momentarily.")]
     [SerializeField]
     private CanvasGroup _canvasGroupOfParentGameObject;
@@ -66,7 +72,42 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
             // Add Component to Parent (GameObject):
             //
             _canvasGroupOfParentGameObject = gameObject.transform.parent.gameObject.AddComponent<CanvasGroup>();
-        }
+
+        }//End if (_canvasGroupOfParentGameObject == null)
+
+        // DO we have a Main Canvas on a MAin GUI GameObject??
+        //
+        if (_canvas == null)
+        {
+            
+            Debug.LogWarning($"There's no Main Canvas in this GameObject's PARENT (GameObject)... for disabling Raycasts in 'DRAG AND DROP' and validating it.\n\nThis GameObject is:= {this.name}... Adding one", this);
+            
+            // Add Component to Parent (GameObject):
+            //
+            _canvas = gameObject.transform.parent.gameObject.AddComponent<Canvas>();
+            
+        }//End if (_canvas != null)
+        else
+        {
+
+            // // Add one CanvasGroup to Main GUI GameObject?  (to Main GUI GameObject that Groups all these ITEMS together)
+            // //
+            // // Get the Canvas Group Component or Add one.
+            // //
+            // CanvasGroup auxCanvasGroup = gameObject.transform.parent.gameObject.GetComponentInParent<CanvasGroup>();
+            // //
+            // if ((_canvasGroupOnMainCanvasGameObject == null) && (auxCanvasGroup == null))
+            // {
+            //
+            //     Debug.LogWarning($"There's no CanvasGroup besides MAIN CANVAS in Main GUI's GameObject... for blocking Raycasts (i.e.: Mouse Pointer interaction) to all GUI momentarily.\n\nThis GameObject is:= {this.name}... Adding one", this);
+            //
+            //     // Add Component to Parent (GameObject):
+            //     //
+            //     _canvasGroupOnMainCanvasGameObject = gameObject.transform.parent.gameObject.AddComponent<CanvasGroup>();
+            //     
+            // }//End if (_canvasGroupOnMainCanvasGameObject == null)
+
+        }//End if (_canvas == null)
 
     }//End Awake
 
@@ -74,8 +115,7 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
     /// <summary>
     /// Start is called before the first frame update
     /// </summary>
-
-
+    
 
     /// <summary>
     /// Update is called once per frame
@@ -110,6 +150,11 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
         // Block Interaction with this UI Element:
         //
         _canvasGroupOfParentGameObject.blocksRaycasts = false;
+        
+        // // Block Interaction with ALL UI Elements on MAIN GUI CANVAS  (even outside of the Inventory Image):
+        // //
+        // _canvasGroupOnMainCanvasGameObject.blocksRaycasts = false;
+
     }
 
     /// <summary>
@@ -147,10 +192,13 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
         //
         _canvasGroupOfParentGameObject.blocksRaycasts = true;
         
+        // // UN-Block Interaction with ALL UI Elements on MAIN GUI CANVAS  (even outside of the Inventory Image):
+        // //
+        // _canvasGroupOnMainCanvasGameObject.blocksRaycasts = true;
+        
         // * Place the UI Element on its previous position, after some time has passed:
         //
         //_rectTransform.anchoredPosition = _last2DPositionOfUIElementBeforeDragNDrop;
-        
     }
 
     public void OnPointerDown(PointerEventData eventData)
