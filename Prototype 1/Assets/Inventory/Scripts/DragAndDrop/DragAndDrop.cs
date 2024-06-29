@@ -24,9 +24,9 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
     private RectTransform _rectTransform;
    
     
-    // [Tooltip("GUI Canvas Group for Main Canvas GameObject of all GameObjects in GUI: for blocking Raycasts (i.e.: Mouse Pointer interaction) to all GUI momentarily.")]
-    // [SerializeField]
-    // private CanvasGroup _canvasGroupOnMainCanvasGameObject;
+    [Tooltip("GUI Canvas Group for this (GUI) GameObject (that is being 'Dragged'): for setting its 'ALPHA COLOR' value... (or even blocking Raycasts (i.e.: Mouse Pointer interaction, to this GUI momentarily), but it will not be necessary because we are doing that on another 'Canvas Group' that belongs to its Parent GameObject.")]
+    [SerializeField]
+    private CanvasGroup _canvasGroupOnThisGameObject;
 
     
     [Tooltip("GUI Canvas Group for Parent GameObject of all GameObjects containing UI_ITEM Component: for blocking Raycasts (i.e.: Mouse Pointer interaction) to all 'UI_ITEMS' Item momentarily.")]
@@ -58,7 +58,41 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
             Debug.LogError($"There's no RectTransform in this GameObject... for DRAG AND DROP.\n\nThis GameObject is:= {this.name}", this);
         }
         
-        // Get the Canvas Group Component or Add one.
+        #region Ini Canvas and CanvasGroups
+        
+        // Add one CanvasGroup to THIS GUI GameObject?  this GUI ITEM?
+        //
+        if (_canvasGroupOnThisGameObject == null)
+        {
+            
+            Debug.LogWarning($"There's no CanvasGroup on this particular ITEM (GUI GameObject)... for playing the ALPHA COLOR and maybe: blocking Raycasts (i.e.: Mouse Pointer interaction) to all GUI momentarily.\n\nThis GameObject is:= {this.name}... Adding one", this);
+
+            
+            // Get the Canvas Group Component or Add one.
+            //
+            CanvasGroup myOwnAuxCanvasGroup = GetComponent<CanvasGroup>();
+
+            // Try to add Component
+            //
+            if (myOwnAuxCanvasGroup == null)
+            {
+                // Add Component to this  GameObject
+                //
+                _canvasGroupOnThisGameObject = gameObject.AddComponent<CanvasGroup>();
+
+            }//End if (myOwnAuxCanvasGroup == null)
+            else
+            {
+                // Add the previous Component to a reference
+                //
+                _canvasGroupOnThisGameObject = myOwnAuxCanvasGroup;
+
+            }//End else of if (myOwnAuxCanvasGroup == null)
+            
+        }//End if (_canvasGroupOnThisGameObject == null)...
+        
+        
+        // Parent GameObject:  Get the Canvas Group Component or Add one.
         //
         _canvasGroupOfParentGameObject = GetComponentInParent<CanvasGroup>();
         //
@@ -89,26 +123,10 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
         }//End if (_canvas != null)
         else
         {
-
-            // // Add one CanvasGroup to Main GUI GameObject?  (to Main GUI GameObject that Groups all these ITEMS together)
-            // //
-            // // Get the Canvas Group Component or Add one.
-            // //
-            // CanvasGroup auxCanvasGroup = gameObject.transform.parent.gameObject.GetComponentInParent<CanvasGroup>();
-            // //
-            // if ((_canvasGroupOnMainCanvasGameObject == null) && (auxCanvasGroup == null))
-            // {
-            //
-            //     Debug.LogWarning($"There's no CanvasGroup besides MAIN CANVAS in Main GUI's GameObject... for blocking Raycasts (i.e.: Mouse Pointer interaction) to all GUI momentarily.\n\nThis GameObject is:= {this.name}... Adding one", this);
-            //
-            //     // Add Component to Parent (GameObject):
-            //     //
-            //     _canvasGroupOnMainCanvasGameObject = gameObject.transform.parent.gameObject.AddComponent<CanvasGroup>();
-            //     
-            // }//End if (_canvasGroupOnMainCanvasGameObject == null)
-
         }//End if (_canvas == null)
 
+        #endregion Ini Canvas and CanvasGroups
+        
     }//End Awake
 
 
@@ -145,18 +163,14 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
 
         // Make it Semi-Transparent:
         //
-        _canvasGroupOfParentGameObject.alpha = _CANVAS_GROUP_ALPHA_SEMITRANSPARENT;
-        
-        // Block Interaction with this UI Element:
+        _canvasGroupOnThisGameObject.alpha = _CANVAS_GROUP_ALPHA_SEMITRANSPARENT;
+
+        // Block Interaction with ALL UI Elements on this GUI CANVAS  (Items children of this Canvas Group)
         //
         _canvasGroupOfParentGameObject.blocksRaycasts = false;
-        
-        // // Block Interaction with ALL UI Elements on MAIN GUI CANVAS  (even outside of the Inventory Image):
-        // //
-        // _canvasGroupOnMainCanvasGameObject.blocksRaycasts = false;
-
     }
 
+    
     /// <summary>
     /// Handles the actual 'Drag and Drop' of the Sprite / UI Element.
     /// </summary>
@@ -186,15 +200,11 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
         
         // Make it 100% Opaque again:
         //
-        _canvasGroupOfParentGameObject.alpha = 1.0f;
-        
-        // UN-Block Interaction with this UI Element:
+        _canvasGroupOnThisGameObject.alpha = 1.0f;
+
+        // UN-Block Interaction with ALL UI Elements on this GUI CANVAS  (Items children of this Canvas Group)
         //
         _canvasGroupOfParentGameObject.blocksRaycasts = true;
-        
-        // // UN-Block Interaction with ALL UI Elements on MAIN GUI CANVAS  (even outside of the Inventory Image):
-        // //
-        // _canvasGroupOnMainCanvasGameObject.blocksRaycasts = true;
         
         // * Place the UI Element on its previous position, after some time has passed:
         //

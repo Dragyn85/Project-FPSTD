@@ -1068,6 +1068,8 @@ GameObject:
   - component: {fileID: 554223380}
   - component: {fileID: 554223379}
   - component: {fileID: 554223378}
+  - component: {fileID: 554223383}
+  - component: {fileID: 554223382}
   - component: {fileID: 554223381}
   m_Layer: 0
   m_Name: Canvas
@@ -1172,6 +1174,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myDragAndDropScript: {fileID: 0}
+--- !u!114 &554223382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 554223376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0.49158823, b: 0.3413534, a: 0.21568628}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &554223383
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 554223376}
+  m_CullTransparentMesh: 1
 --- !u!1 &607543009
 GameObject:
   m_ObjectHideFlags: 0
@@ -2541,6 +2581,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1028955028}
   - component: {fileID: 1028955029}
+  - component: {fileID: 1028955033}
   - component: {fileID: 1028955030}
   - component: {fileID: 1028955032}
   m_Layer: 0
@@ -2607,8 +2648,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvas: {fileID: 554223380}
-  _rectTransform: {fileID: 0}
-  _canvasGroupOnMainCanvasGameObject: {fileID: 0}
+  _rectTransform: {fileID: 1028955028}
+  _canvasGroupOnThisGameObject: {fileID: 0}
   _canvasGroupOfParentGameObject: {fileID: 792233074}
   _last2DPositionOfUIElementBeforeDragNDrop: {x: 0, y: 0}
 --- !u!114 &1028955032
@@ -2623,6 +2664,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f876ef77f9fcc446087c4538e239ccc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!225 &1028955033
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1028955027}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1065981916
 GameObject:
   m_ObjectHideFlags: 0
