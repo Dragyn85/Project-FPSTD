@@ -203,7 +203,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a79b0262a0d6fa43858d867fe3df827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item:
+  _item:
     _itemID: 0
     _itemType: 3
     _amount: 1
@@ -533,7 +533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a79b0262a0d6fa43858d867fe3df827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item:
+  _item:
     _itemID: 0
     _itemType: 2
     _amount: 1
@@ -603,7 +603,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfa484a1ab5d6fe51ba030769418f05b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _myDragAndDropScript: {fileID: 0}
 --- !u!114 &318956493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -654,6 +653,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71dd1dc456488491c9303b94c9d5d8d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _myUI_Item: {fileID: 0}
 --- !u!1 &328557944
 GameObject:
   m_ObjectHideFlags: 0
@@ -841,6 +841,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 423c274a982a48543bb34884211b4a95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _itemSlotGrid: {fileID: 1422342526}
   _arrayOfSlot:
   - {fileID: 507618935}
   - {fileID: 1201466934}
@@ -850,6 +851,9 @@ MonoBehaviour:
   - {fileID: 909497810}
   - {fileID: 607543017}
   - {fileID: 318956495}
+  _itemSlotContainer: {fileID: 0}
+  _itemSlotTemplate: {fileID: 0}
+  _player: {fileID: 0}
 --- !u!1 &507618927
 GameObject:
   m_ObjectHideFlags: 0
@@ -901,7 +905,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfa484a1ab5d6fe51ba030769418f05b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _myDragAndDropScript: {fileID: 0}
 --- !u!114 &507618933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -952,6 +955,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71dd1dc456488491c9303b94c9d5d8d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _myUI_Item: {fileID: 0}
 --- !u!1 &530237270
 GameObject:
   m_ObjectHideFlags: 0
@@ -1037,7 +1041,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a79b0262a0d6fa43858d867fe3df827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item:
+  _item:
     _itemID: 0
     _itemType: 3
     _amount: 1
@@ -1069,8 +1073,6 @@ GameObject:
   - component: {fileID: 554223379}
   - component: {fileID: 554223378}
   - component: {fileID: 554223383}
-  - component: {fileID: 554223382}
-  - component: {fileID: 554223381}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -1161,49 +1163,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &554223381
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 554223376}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dfa484a1ab5d6fe51ba030769418f05b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _myDragAndDropScript: {fileID: 0}
---- !u!114 &554223382
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 554223376}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.49158823, b: 0.3413534, a: 0.21568628}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!222 &554223383
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1263,7 +1222,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfa484a1ab5d6fe51ba030769418f05b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _myDragAndDropScript: {fileID: 0}
 --- !u!114 &607543015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1314,6 +1272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71dd1dc456488491c9303b94c9d5d8d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _myUI_Item: {fileID: 0}
 --- !u!1 &626059707
 GameObject:
   m_ObjectHideFlags: 0
@@ -1615,7 +1574,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a79b0262a0d6fa43858d867fe3df827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item:
+  _item:
     _itemID: 0
     _itemType: 0
     _amount: 1
@@ -1846,7 +1805,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a79b0262a0d6fa43858d867fe3df827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item:
+  _item:
     _itemID: 0
     _itemType: 3
     _amount: 5
@@ -1999,7 +1958,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a79b0262a0d6fa43858d867fe3df827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item:
+  _item:
     _itemID: 0
     _itemType: 3
     _amount: 1
@@ -2244,7 +2203,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a79b0262a0d6fa43858d867fe3df827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item:
+  _item:
     _itemID: 0
     _itemType: 4
     _amount: 1
@@ -2348,7 +2307,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a79b0262a0d6fa43858d867fe3df827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item:
+  _item:
     _itemID: 0
     _itemType: 3
     _amount: 10
@@ -2418,7 +2377,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfa484a1ab5d6fe51ba030769418f05b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _myDragAndDropScript: {fileID: 0}
 --- !u!114 &909497808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2469,6 +2427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71dd1dc456488491c9303b94c9d5d8d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _myUI_Item: {fileID: 0}
 --- !u!1 &934338224
 GameObject:
   m_ObjectHideFlags: 0
@@ -2582,8 +2541,8 @@ GameObject:
   - component: {fileID: 1028955028}
   - component: {fileID: 1028955029}
   - component: {fileID: 1028955033}
-  - component: {fileID: 1028955030}
   - component: {fileID: 1028955032}
+  - component: {fileID: 1028955030}
   m_Layer: 0
   m_Name: itemSlotTemplate
   m_TagString: Untagged
@@ -2649,9 +2608,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canvas: {fileID: 554223380}
   _rectTransform: {fileID: 1028955028}
+  _rectTransformOfParentGameObject: {fileID: 792233073}
   _canvasGroupOnThisGameObject: {fileID: 1028955033}
   _canvasGroupOfParentGameObject: {fileID: 792233074}
   _last2DPositionOfUIElementBeforeDragNDrop: {x: 0, y: 0}
+  _rectTransformOfInventoryGUI: {fileID: 845386166}
 --- !u!114 &1028955032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2664,6 +2625,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f876ef77f9fcc446087c4538e239ccc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _uiSlot: {fileID: 0}
+  _item:
+    _itemID: 0
+    _itemType: 0
+    _amount: 0
 --- !u!225 &1028955033
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -3091,7 +3057,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a79b0262a0d6fa43858d867fe3df827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item:
+  _item:
     _itemID: 0
     _itemType: 1
     _amount: 2
@@ -3282,7 +3248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a79b0262a0d6fa43858d867fe3df827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item:
+  _item:
     _itemID: 0
     _itemType: 4
     _amount: 1
@@ -3390,7 +3356,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfa484a1ab5d6fe51ba030769418f05b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _myDragAndDropScript: {fileID: 0}
 --- !u!114 &1201466932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3441,6 +3406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71dd1dc456488491c9303b94c9d5d8d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _myUI_Item: {fileID: 0}
 --- !u!1 &1237869836
 GameObject:
   m_ObjectHideFlags: 0
@@ -3492,7 +3458,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfa484a1ab5d6fe51ba030769418f05b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _myDragAndDropScript: {fileID: 0}
 --- !u!114 &1237869842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3543,6 +3508,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71dd1dc456488491c9303b94c9d5d8d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _myUI_Item: {fileID: 0}
 --- !u!1 &1250945178
 GameObject:
   m_ObjectHideFlags: 0
@@ -3678,7 +3644,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfa484a1ab5d6fe51ba030769418f05b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _myDragAndDropScript: {fileID: 0}
 --- !u!114 &1305521072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3729,6 +3694,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71dd1dc456488491c9303b94c9d5d8d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _myUI_Item: {fileID: 0}
 --- !u!1 &1325846906
 GameObject:
   m_ObjectHideFlags: 0
@@ -4342,7 +4308,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a79b0262a0d6fa43858d867fe3df827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item:
+  _item:
     _itemID: 0
     _itemType: 2
     _amount: 1
@@ -4541,7 +4507,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfa484a1ab5d6fe51ba030769418f05b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _myDragAndDropScript: {fileID: 0}
 --- !u!114 &1595931528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4592,6 +4557,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71dd1dc456488491c9303b94c9d5d8d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _myUI_Item: {fileID: 0}
 --- !u!1 &1647098958
 GameObject:
   m_ObjectHideFlags: 0
@@ -4827,7 +4793,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a79b0262a0d6fa43858d867fe3df827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item:
+  _item:
     _itemID: 0
     _itemType: 3
     _amount: 1
@@ -4931,7 +4897,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a79b0262a0d6fa43858d867fe3df827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item:
+  _item:
     _itemID: 0
     _itemType: 0
     _amount: 1
@@ -5101,7 +5067,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a79b0262a0d6fa43858d867fe3df827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item:
+  _item:
     _itemID: 0
     _itemType: 1
     _amount: 1

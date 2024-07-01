@@ -10,9 +10,13 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
 
     #region Attributes
 
+    #region CONSTANTS
+
     //  CONSTANTS
     private float _CANVAS_GROUP_ALPHA_SEMITRANSPARENT = 0.333f;
-
+    
+    #endregion CONSTANTS
+    
     // Variables
     
     [Tooltip("GUI Canvas for extracting information: the UI Canvas Scale.")]
@@ -23,6 +27,9 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
     [SerializeField]
     private RectTransform _rectTransform;
    
+    [Tooltip("Rect Transform of the Main Parent GameObject of all GameObjects containing UI_ITEM Component.")]
+    [SerializeField]
+    private RectTransform _rectTransformOfParentGameObject;
     
     [Tooltip("GUI Canvas Group for this (GUI) GameObject (that is being 'Dragged'): for setting its 'ALPHA COLOR' value... (or even blocking Raycasts (i.e.: Mouse Pointer interaction, to this GUI momentarily), but it will not be necessary because we are doing that on another 'Canvas Group' that belongs to its Parent GameObject.")]
     [SerializeField]
@@ -37,6 +44,14 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
     [SerializeField]
     private Vector2 _last2DPositionOfUIElementBeforeDragNDrop = new Vector2(0, 0);
 
+        
+    #region OnDrop: Validations: Not being Droppped outside the GUI of Inventory
+    
+    [Tooltip("This is the Main 'RectTransform' that represents the GUI of Inventory (with all the Inventory SLOTS on GUI).\n\n* This property is good enough for Validating a possible 'OnDrop' outside the GUI of Inventory")]
+    [SerializeField]
+    private RectTransform _rectTransformOfInventoryGUI;
+    
+    #endregion OnDrop: Validations: Not being Droppped outside the GUI of Inventory
 
     #endregion Attributes
 
@@ -48,7 +63,11 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
     /// </summary>
     private void Awake()
     {
-        // Get the UI Element to Drag and Drop.
+        
+        #region Ini RectTransforms
+        
+        // 1-
+        //   .1- Get the 'RectTransform' of:  UI Element to Drag and Drop.
         //
         _rectTransform = GetComponent<RectTransform>();
 
@@ -56,11 +75,50 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
         {
         
             Debug.LogError($"There's no RectTransform in this GameObject... for DRAG AND DROP.\n\nThis GameObject is:= {this.name}", this);
-        }
+
+        }//End if (_rectTransform == null)
         
+
+        //   .2- Get the Main Parent 'RectTransform' of:  Parent GameObject of this ITEM, (UI Element to Drag and Drop).
+        //
+        if (_rectTransformOfParentGameObject == null)
+        {
+            
+            // Try to GetComponent
+            //
+            _rectTransformOfParentGameObject = _rectTransform.parent.GetComponent<RectTransform>();
+
+        
+            if (_rectTransformOfParentGameObject == null)
+            {
+        
+                Debug.LogError($"(Designer error) There's no link to a: RectTransform, from the PARENT GAMEOBJECT of this GameObject... for DRAG AND DROP.\n\nThis GameObject is:= {this.name}", this);
+                
+                // Add it:
+                //
+                _rectTransformOfParentGameObject = _rectTransform.parent.transform.gameObject.GetComponent<RectTransform>();
+
+            }//End if (_rectTransform == null)
+
+        }//End if (_rectTransform == null)
+        
+        
+        // 2- Get the 'RectTransform' of:  Inventory GUI space (UI Element to Drop ITEMS on).
+        // This will be used for Validations:   Drop (Item) Out of Bounds.
+        //
+        if (_rectTransformOfInventoryGUI == null)
+        {
+        
+            Debug.LogError($"There's no 'RectTransform' of:  Inventory GUI space (UI Element to Drop ITEMS on) in this GameObject... for VALIDATING DRAG AND DROP (Drop (Item) Out of Bounds).\n\nThis GameObject is:= {this.name}", this);
+
+        }//End if (_rectTransform == null)
+        
+        #endregion Ini RectTransforms
+        
+
         #region Ini Canvas and CanvasGroups
         
-        // Add one CanvasGroup to THIS GUI GameObject?  this GUI ITEM?
+        // 3- Add one CanvasGroup to THIS GUI GameObject?  this GUI ITEM?
         //
         if (_canvasGroupOnThisGameObject == null)
         {
@@ -92,21 +150,31 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
         }//End if (_canvasGroupOnThisGameObject == null)...
         
         
-        // Parent GameObject:  Get the Canvas Group Component or Add one.
-        //
-        _canvasGroupOfParentGameObject = GetComponentInParent<CanvasGroup>();
+        // 4- Parent GameObject:  Get the Canvas Group Component or Add one.
         //
         // Add one CanvasGroup ?  (to Parent GameObject that Groups all these ITEMS together)
         //
         if (_canvasGroupOfParentGameObject == null)
         {
-        
-            Debug.LogWarning($"There's no CanvasGroup in this GameObject's PARENT (GameObject)... for disabling Raycasts in 'DRAG AND DROP'.\n\nThis GameObject is:= {this.name}... Adding one", this);
             
-            // Add Component to Parent (GameObject):
+            // Try to get <CanvasGroup> Component from this Parent's GameObject:
             //
-            _canvasGroupOfParentGameObject = gameObject.transform.parent.gameObject.AddComponent<CanvasGroup>();
+            _canvasGroupOfParentGameObject = _rectTransformOfParentGameObject.GetComponent<CanvasGroup>();
 
+            if (_canvasGroupOfParentGameObject == null)
+            {
+                
+                Debug.LogWarning($"There's no CanvasGroup in this GameObject's PARENT (GameObject)... for disabling Raycasts in 'DRAG AND DROP'.\n\nThis GameObject is:= {this.name}... Adding one", this);
+            
+                // Add Component to Parent (GameObject):
+                //
+                _canvasGroupOfParentGameObject = _rectTransformOfParentGameObject.gameObject.AddComponent<CanvasGroup>();
+            }
+            else
+            {
+                // Everything is OK.
+            }//End else of if (_canvasGroupOfParentGameObject == null)
+        
         }//End if (_canvasGroupOfParentGameObject == null)
 
         // DO we have a Main Canvas on a MAin GUI GameObject??
@@ -177,7 +245,6 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
     /// <param name="eventData"></param>
     public void OnDrag(PointerEventData eventData)
     {
-
         Debug.Log($"OnDrag");
 
         // Drag and Drop Math:
@@ -191,14 +258,49 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
             _rectTransform.anchoredPosition += eventData.delta;
             
         }//End if (_canvas != null)
-
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         Debug.Log($"OnEndDrag");
+
+        #region OnDrop Validation: Out of Bounds of (GUI) UI_Inventory
         
-        // Make it 100% Opaque again:
+        // 2- Validations:   Drop (Item) Out of Bounds.
+        //
+        if (_rectTransformOfInventoryGUI != null)
+        {
+            
+            // Check if the UI Element is out of bounds of the GUI:
+            //
+            if ( ! _rectTransform.Overlaps( _rectTransformOfInventoryGUI ) )
+            {
+                // It is OUT OF BOUNDS !
+                // The ITEM (GUI GameObject)  is being Dropped: "Out Of Bounds", on a blank space on screen:
+                // Reposition the GUI Element(ITEM):
+                //
+                _rectTransform.anchoredPosition = _last2DPositionOfUIElementBeforeDragNDrop;
+                
+                // Debug Only. Comment Latter:
+                //
+                Debug.LogWarning($"-->VALIDATING DRAG AND DROP (Drop (Item) Out of Bounds.\n* The ITEM GUI is out of bounds.\n\nThis GameObject is:= {this.name}", this);
+
+            }//End if (! _rectTransform.RectOverlaps( _rectTransformOfInventoryGUI ) )
+            else
+            {
+                // The "Drag and Drop" execution: is valid
+                
+                // Skip:   this use case is being handled in another script that is on a GameObject with GUI info from the UI_SLOT, GUI for the SLOT:  ItemDropOnSlot.cs
+                
+            }//End else of if ( ! _rectTransform.Overlaps( _rectTransformOfInventoryGUI ) )
+
+        }//End if (_rectTransform == null)
+
+        #endregion OnDrop Validation: Out of Bounds of (GUI) UI_Inventory
+        
+        // After Validation:  Re-Enable Raycasts:
+        //
+        // Make it Semi-Transparent:
         //
         _canvasGroupOnThisGameObject.alpha = 1.0f;
 
@@ -206,11 +308,13 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
         //
         _canvasGroupOfParentGameObject.blocksRaycasts = true;
         
-        // * Place the UI Element on its previous position, after some time has passed:
-        //
-        //_rectTransform.anchoredPosition = _last2DPositionOfUIElementBeforeDragNDrop;
-    }
+    }//End OnEndDrag()
 
+    
+    /// <summary>
+    /// Whenever you (Right) Click. 
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnPointerDown(PointerEventData eventData)
     {
         Debug.Log($"OnPointerDown");

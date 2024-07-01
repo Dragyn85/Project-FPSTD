@@ -20,7 +20,7 @@ public class Inventory
     private int _latestBiggestItemID = 0;
 
     /// <summary>
-    /// Delegate Function: Observer Patter (this is the "Observed" or "Subject")... adn this is the "Event" to be Fired
+    /// Delegate Function: Observer Patter (this is the "Observed" or "Subject")... and this is the "Event" to be Fired
     /// ...whenever the List Items  (Data...) changes.
     ///
     /// Previous one:  public event EventHandler OnItemListChanged;

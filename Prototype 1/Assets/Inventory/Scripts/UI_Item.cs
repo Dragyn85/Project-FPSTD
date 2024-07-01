@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// GUI Code Behind: Item in GUI  (provisional name of GameObject:  "itemSlotTemplate_1 (clone), ..., etc")
+/// GUI Code Behind: Item in GUI  (provisional name of GameObject:  "itemSlotTemplate(Clone)", ..., etc).
 /// </summary>
 public class UI_Item : MonoBehaviour
 {
@@ -11,11 +11,15 @@ public class UI_Item : MonoBehaviour
     /// <summary>
     /// GUI UI_Slot that is connected to this UI_ITEM Component.
     /// </summary>
+    [Tooltip("GUI UI_Slot that is connected to this UI_ITEM Component.")]
+    [SerializeField]
     private UI_Slot _uiSlot;
     
     /// <summary>
-    /// Represents an unit of: ITEM Data-Logic
+    /// Represents an unit of: ITEM Data-Logic.
     /// </summary>
+    [Tooltip("Represents an unit of: ITEM Data-Logic.")]
+    [SerializeField]
     private Item _item;
 
     #endregion Attributes
@@ -23,6 +27,12 @@ public class UI_Item : MonoBehaviour
     
     #region Methods
 
+    /// <summary>
+    /// Links THIS (Component's references.. Dependency Injection):
+    /// UI_ITEM (Component) to a UI_Slot (Component)... given "Item" Data (fully initialized previously) as Input.
+    /// </summary>
+    /// <param name="item"></param>
+    /// <param name="uiSlot"></param>
     public void AddUIItem(Item item, UI_Slot uiSlot)
     {
         this._item = item;
@@ -37,6 +47,11 @@ public class UI_Item : MonoBehaviour
         uiSlot.SetUI_Item( this );
     }
     
+    /// <summary>
+    /// Links THIS (Component's references.. Dependency Injection):
+    /// UI_ITEM (Component) to a UI_Slot (Component).
+    /// </summary>
+    /// <param name="uiSlot"></param>
     public void AddUIItem(UI_Slot uiSlot)
     {
         
@@ -50,6 +65,11 @@ public class UI_Item : MonoBehaviour
         uiSlot.SetUI_Item( this );
     }
     
+    /// <summary>
+    /// Removes THIS (Component's references.. Dependency Injection):
+    /// UI_ITEM (Component) from its:  UI_Slot (Component)... leaving it completely disconnected from the GUI of INventory's GameObjects.
+    /// </summary>
+    /// <param name="disconnectFromItemDatabaseToo"></param>
     public void RemoveUIItem(bool disconnectFromItemDatabaseToo)
     {
         

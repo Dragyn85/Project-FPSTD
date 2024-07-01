@@ -12,11 +12,18 @@ public class UI_Slot : MonoBehaviour
     /// <summary>
     /// UI_Item Object, which is the GUI Visual representation of an UI_Item
     /// </summary>
+    [Tooltip("UI_Item Object, which is the GUI Visual representation of an UI_Item")]
+    [SerializeField]
     private UI_Item _myUI_Item;
 
     #endregion Attributes
 
+    
+    #region Unity Methods
+    
+    #endregion Unity Methods
 
+    
     #region Methods
     
     public void SetUI_Item(UI_Item item)

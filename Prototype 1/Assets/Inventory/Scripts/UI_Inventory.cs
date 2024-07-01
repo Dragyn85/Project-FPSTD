@@ -8,8 +8,6 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Inventory System's GUI ( Code Behind the GUI ).
-/// 
-/// Todo: Remove the hard-coded values.
 /// </summary>
 public class UI_Inventory : MonoBehaviour
 {
@@ -17,13 +15,17 @@ public class UI_Inventory : MonoBehaviour
     #region Attributes
     
     /// <summary>
-    /// Inventory Data-base Structure
+    /// Inventory Data-base Structure.
     /// </summary>
+    [Tooltip("Inventory Data-base Structure.")]
+    [SerializeField]
     private Inventory _inventory;
     
     /// <summary>
     /// Main GUI Container for the Slots.
     /// </summary>
+    [Tooltip("Main GUI Container for the Slots.")]
+    [SerializeField]
     private Transform _itemSlotGrid;
 
     /// <summary>
@@ -34,18 +36,24 @@ public class UI_Inventory : MonoBehaviour
     private List<UI_Slot> _arrayOfSlot;
     
     /// <summary>
-    /// Main GUI Container for the Items. This will be cloned for creating ITEMS.
+    /// Main GUI Container for the Items. This is the GUI ITEMS Parent GameObject.
     /// </summary>
-    private Transform itemSlotContainer;
+    [Tooltip("Main GUI Container for the Items. This will be cloned for creating ITEMS.")]
+    [SerializeField]
+    private Transform _itemSlotContainer;
     
     /// <summary>
-    /// Main GUI Container for the Items. This will be cloned for creating ITEMS.
+    /// A GUI ITEM. GUI Container for the Items. This will be cloned for creating ITEMS.
     /// </summary>
-    private Transform itemSlotTemplate;
+    [Tooltip("Main GUI Container for the Items. This will be cloned for creating ITEMS.")]
+    [SerializeField]
+    private Transform _itemSlotTemplate;
 
     /// <summary>
     /// Player in the Game.
     /// </summary>
+    [Tooltip("Player in the Game.")]
+    [SerializeField]
     private Player _player;
 
     #endregion Attributes
@@ -55,8 +63,8 @@ public class UI_Inventory : MonoBehaviour
 
     private void Awake()
     {
-        itemSlotContainer = transform.Find("itemSlotContainer");
-        itemSlotTemplate = itemSlotContainer.Find("itemSlotTemplate");
+        _itemSlotContainer = transform.Find("itemSlotContainer");
+        _itemSlotTemplate = _itemSlotContainer.Find("itemSlotTemplate");
     }
 
     #endregion Unity Methods
@@ -181,7 +189,6 @@ public class UI_Inventory : MonoBehaviour
     /// <summary>
     /// Gets the First EMPTY "UI_Slot" in the list.
     /// </summary>
-    /// <param name="item"></param>
     /// <returns></returns>
     public UI_Slot GetFirstEmptyUISlot()
     {
@@ -268,7 +275,12 @@ public class UI_Inventory : MonoBehaviour
     }// End Inventory_OnItemListChangedAddedItem
 
     
-    
+    /// <summary>
+    /// Event that is triggered whenever an ITEM id is REMOVED from the DATABASE.
+    /// ...so the GUI's "Code Behind" (i.e.: this script).. caches it and updates the Visuals accordingly.
+    /// </summary>
+    /// <param name="itemAmountUpdateOnly">TRUE: it was an Update of the AMOUNT... | FALSE: It was a real "REMOVE ITEM" (completely) from  place in the Inventory List (Database).</param>
+    /// <param name="myItem"></param>
     private void Inventory_OnItemListChangedRemovedItem(bool itemAmountUpdateOnly, Item myItem)
     {
         
@@ -326,23 +338,15 @@ public class UI_Inventory : MonoBehaviour
         
     }// End Inventory_OnItemListChanged()
     
-    
-    
-    // private void Inventory_OnItemListChanged(object sender, System.EventArgs e)
-    // {
-    //     // TODO:  Correct this
-    //     // 1- Delegate for: ADD ITEM to database
-    //     // 2- Delegate for: REMOVE ITEM from database
-    //     // RefreshUIInventoryUIItems(e.  UI_Slot uiSlot, UI_Item uiItem);
-    //     
-    //     
-    // }
 
     #endregion Delegates / Observer Pattern
 
     #region Render GUI
 
     
+    /// <summary>
+    /// Refreshes the GUI ITEMS numbers and Images in the GUI of Inventory (based of the actual current state of the Invetory Database).
+    /// </summary>
     private void RefreshUIRendering()
     {
 
@@ -405,23 +409,20 @@ public class UI_Inventory : MonoBehaviour
                 // 2- There's no ITEMS in that UI_SLOT: empty
                 //...Refresh colors of EMPTY UI_SLOTs
                 //...REMOVE UI Elements (UI_ITEMS) that were in that Slot:
-                // or Skip this:   if it was done already in another Method. 
+                // or Skip this:   if it was done already in another Method:  that's the case. OK!
 
             }//End else of if (uiSlot.GetUI_Item() != null)
             
         }//End For Each UI_Slot
 
     }// End RefreshUIRendering()
-    
-    
-    
-    
+
+
     /// <summary>
-    /// DESTROYS GameObject GUI in Scene with: item as data, UI_ITEM as UI Element.
+    /// DESTROYS a GameObject GUI in Scene with: ITEM as data, UI_ITEM as UI Element. 
     /// </summary>
-    /// <param name="myItem"></param>
+    /// <param name="myUIItem"></param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
     private bool TryDestroyGameObjectUIItemFromGUI(UI_Item myUIItem)
     {
 
@@ -455,6 +456,8 @@ public class UI_Inventory : MonoBehaviour
     
     /// <summary>
     /// Creates a new GameObject GUI in Scene with: item as data, UI_ITEM as UI Element.
+    /// It also adds the Delegates for actions when the UI_ITEM is Clicked.
+    /// NOTICE:  This method does NOT link the ITEM to the Database yet... neither it adds the UI_ITEM to any GUI UI_SLOT yet.
     /// </summary>
     /// <param name="item"></param>
     /// <param name="uiSlot"></param>
@@ -466,7 +469,7 @@ public class UI_Inventory : MonoBehaviour
         //...then: Create (Instantiate) a set of GameObjects, which mean:  UI_SLOTS that are filled with those ITEMS.
         //...and: Add some Delegate Functions:  for "Mouse Input Actions" (Right CLick, Left Click, etc). 
         //
-        RectTransform itemSlotRectTransform = Instantiate(itemSlotTemplate, itemSlotContainer).GetComponent<RectTransform>();
+        RectTransform itemSlotRectTransform = Instantiate(_itemSlotTemplate, _itemSlotContainer).GetComponent<RectTransform>();
         //
         itemSlotRectTransform.gameObject.SetActive(true);
         //
@@ -564,10 +567,6 @@ public class UI_Inventory : MonoBehaviour
         //
         TryRemoveUIItemGUIConnections( uiSlot );
 
-        // ACA_QUEDE NOT: Remove the Data   (Notice: this was triggered by GUI)
-        //
-        //_inventory.RemoveItem( myUIItem.GetItem() );
-
     }// End RefreshUIInventoryUIItemsAfterRemovingUIItem()
 
     
@@ -582,7 +581,6 @@ public class UI_Inventory : MonoBehaviour
         // Empty UI_Slot, to add there the new UI_Item:
         //
         UI_Slot emptyUISlot = null;
-
         
         // 1- Search for the first empty Slot in the GUI:
         //
@@ -632,7 +630,7 @@ public class UI_Inventory : MonoBehaviour
     /// Updates the GUI Components Connections, whenever the "Data" changes in Inventory (because: Someone REMOVED an ITEM from the <code> List Item </code>,
     ///...which is the Inventory Data-Logic itself). <br/><br/>
     ///
-    /// * Removing ITEM: In this case the input parameter <code>I_Item uiItem</code> is NULL. <br/>
+    /// * Removing ITEM: In this case the input parameter <code>UI_Item uiItem</code> is NULL. <br/>
 
     /// </summary>
     private bool TryRemoveUIItemGUIConnections(UI_Slot uiSlot)
@@ -696,7 +694,7 @@ public class UI_Inventory : MonoBehaviour
         // // Delete all the child-Objects of the "itemSlotContainer" (which is a RectTransform):
         // // ...that are not an:   "itemSlotTemplate"
         // //
-        // foreach (Transform child in itemSlotContainer)
+        // foreach (Transform child in _itemSlotContainer)
         // {
         //     if (child == itemSlotTemplate) continue;
         //     

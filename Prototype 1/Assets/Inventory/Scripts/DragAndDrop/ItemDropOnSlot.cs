@@ -4,16 +4,18 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-
+/// <summary>
+/// Handles Mouse Interface Methods when Dropping a GUI GameObject.
+/// In this case it handles the Drop execution of GUI ITEMS.
+/// </summary>
 public class ItemDropOnSlot : MonoBehaviour, IDropHandler /*, IPointerEnterHandler, IPointerExitHandler */ 
 {
 
     #region Attributes
 
-    [Tooltip("...")]
-    [SerializeField]
-    private DragAndDrop _myDragAndDropScript;
-
+    // [Tooltip("...")]
+    // [SerializeField]
+    // private int _myDefaultVar;
 
     #endregion Attributes
 
