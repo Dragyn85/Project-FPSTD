@@ -2649,7 +2649,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canvas: {fileID: 554223380}
   _rectTransform: {fileID: 1028955028}
-  _canvasGroupOnThisGameObject: {fileID: 0}
+  _canvasGroupOnThisGameObject: {fileID: 1028955033}
   _canvasGroupOfParentGameObject: {fileID: 792233074}
   _last2DPositionOfUIElementBeforeDragNDrop: {x: 0, y: 0}
 --- !u!114 &1028955032
