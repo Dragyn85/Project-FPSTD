@@ -70,16 +70,20 @@ public class Player : MonoBehaviour
                 
                 // ACA_QUEDE
                 
-                Item myItem = inventory.CreateNewItem(Item.ItemType.HealthPotion, 1);
-                inventory.RemoveItem( myItem );
+                // This creates problems. It is easier to just use the: inventory.RemoveItem(item);  (which triggers from Database an EVent that  the "Code Behind") the GUI picks-up and refreshes the GUI accordingly.
+                // Not do: ...Item myItem = inventory.CreateNewItem(Item.ItemType.HealthPotion, 1);
+                //
+                inventory.RemoveItem( item /*myItem*/ );
                     // Before it was:  inventory.RemoveItem(new Item { itemType = Item.ItemType.HealthPotion, amount = 1 });
                 break;
             
             case Item.ItemType.ManaPotion:
                 FlashBlue();
                 
-                Item myItem2 = inventory.CreateNewItem(Item.ItemType.ManaPotion, 1);
-                inventory.RemoveItem( myItem2 );
+                // This creates problems. It is easier to just use the: inventory.RemoveItem(item);  (which triggers from Database an EVent that  the "Code Behind") the GUI picks-up and refreshes the GUI accordingly.
+                // Not do: ...Item myItem2 = inventory.CreateNewItem(Item.ItemType.ManaPotion, 1);
+                //
+                inventory.RemoveItem( item /*myItem2*/ );
                     // Before itt was:  inventory.RemoveItem(new Item { itemType = Item.ItemType.ManaPotion, amount = 1 });
                 break;
         }
