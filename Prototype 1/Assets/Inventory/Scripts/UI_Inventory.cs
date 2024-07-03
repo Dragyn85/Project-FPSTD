@@ -155,11 +155,11 @@ public class UI_Inventory : MonoBehaviour
 
     
     /// <summary>
-    /// Gets the First "UI_Item" associated to an "Item".
+    /// Gets the First "UI_Item" associated to an "ItemType".
     /// </summary>
-    /// <param name="item"></param>
+    /// <param name="itemType"></param>
     /// <returns></returns>
-    public UI_Item GetFirstUIItem(Item item)
+    public UI_Item GetFirstUIItem(Item.ItemType itemType)
     {
         
         int uiInventoryLength = _arrayOfSlot.Count;
@@ -170,12 +170,18 @@ public class UI_Inventory : MonoBehaviour
             if ( _arrayOfSlot[ i ].GetUI_Item() != null )
             {
                 
-                if (_arrayOfSlot[i].GetUI_Item().GetItem() == item)
+                if (_arrayOfSlot[i].GetUI_Item().GetItem() != null)
                 {
-                    // Found it
-                    //
-                    return _arrayOfSlot[i].GetUI_Item();
-                }
+                    
+                    if (_arrayOfSlot[i].GetUI_Item().GetItem().GetItemType() == itemType)
+                    {
+
+                        // Found it
+                        //
+                        return _arrayOfSlot[i].GetUI_Item();
+
+                    }//End if .. itemType
+                }//End if (_arrayOfSlot[i].GetUI_Item().GetItem() != null)
                 
             }//End if ( _arrayOfSlot[ i ].GetUI_Item() != null )
             
@@ -292,7 +298,6 @@ public class UI_Inventory : MonoBehaviour
             // Skip.
             // Maybe: Update the TextMeshProNumbers for this Item AMOUNT on this UI_SLot.
 
-     
         }//End if (itemAmountUpdateOnly)
         else
         {
@@ -304,33 +309,58 @@ public class UI_Inventory : MonoBehaviour
             UI_Item myUIItem = GetUIItemByID( myItem.GetItemID() );
             
             
-            // Removed "Item"  (it might not be there in UI...)
+            // VALIDATION:   Removed "Item"  (it might not be there in UI...)
             //
-            if (myUIItem != null)
+            if (myUIItem == null)
             {
+                
+                Debug.LogWarning($"There's no UI_ITEM (that belongs to Database ITEM = { myItem }...\n...with that ID = { myItem.GetItemID() })...\n...to REMOVE it from ( GUI UI_SLOT ), UI_INVENTORY....\n\nThis GameObject is:= {this.name}", this);
+                
 
-                // Try to REMOVE it (my UI_Item) from the GUI:
+                // The Item ID was a fake one (which means, it was deleted from the GUI,
+                // ..by using  "UseAction()"  Delegate-callback).
+                // Resolution of the Exception:   Search the "Item GUI" (UI_ITEM) BY TYPE...
+                //...and remove THE FIRST ONE YOU FIND.
                 //
-                // There's an UI_SLOT => (Try to...) REMOVE its UI_ITEM  from the GUI:
-                //
-                RefreshUIInventoryUIItemsAfterRemovingUIItem( myUIItem.GetUISlot() );
+                myUIItem = GetFirstUIItem( myItem.GetItemType() );
+
                 
-                // Destroy the GameObject (that is the GUI Image/SpriteRenderer) from the Scene:
+                // Super-Exception:
+                // "myUIItem" is NULL too... so the GUI does NOT have that Item...
+                // RESOLUTION:   DON'T DO ANYTHING, just complain with the Developers XD
                 //
-                if (! TryDestroyGameObjectUIItemFromGUI( myUIItem ) )
+                if ( myUIItem == null )
                 {
-                    Debug.LogError($"There's no GUI GameObject that has a UI_ITEM to DESTROY it ( GUI UI_ITEM ), UI_INVENTORY....\n\nThis GameObject is:= {this.name}", this);
-                }
+                    
+                    Debug.LogError($"There's no UI_ITEM (that belongs to Database ITEM = { myItem }...\n...even when I do a SEARCH BY [temType = { myItem.GetItemType() })]...\n...to REMOVE it from ( GUI UI_SLOT ), UI_INVENTORY....\n-> NO FURTHER ACTIONS WILL BE PERFORMED.\n\nThis GameObject is:= {this.name}", this);
+
+                    // Just End it HERE.
+
+                }//End if ( myUIItem == null)
                 
-            }//End if (myUIItem != null)
+            }//End if (myUIItem == null)
             else
             {
-
-                Debug.LogError($"There's no UI_ITEM to REMOVE from ( GUI UI_SLOT ), UI_INVENTORY....\n\nThis GameObject is:= {this.name}", this);
-
-            }//End else of if (myUIItem != null)
+                // It is:  myUIItem != null.
+                // Everything is: CORRECT!
+                
+            }//End else of if (myUIItem == null)
             
-        }//End if (itemAmountUpdateOnly)
+                            
+            // Try to REMOVE it (my UI_Item) from the GUI:
+            //
+            // There's an UI_SLOT => (Try to...) REMOVE its UI_ITEM  from the GUI:
+            //
+            RefreshUIInventoryUIItemsAfterRemovingUIItem( myUIItem.GetUISlot() );
+                
+            // Destroy the GameObject (that is the GUI Image/SpriteRenderer) from the Scene:
+            //
+            if (! TryDestroyGameObjectUIItemFromGUI( myUIItem ) )
+            {
+                Debug.LogError($"There's no GUI GameObject that has a UI_ITEM to DESTROY it ( GUI UI_ITEM ), UI_INVENTORY....\n\nThis GameObject is:= {this.name}", this);
+            }
+            
+        }//End else of if (itemAmountUpdateOnly)
 
         // Refresh the UI Rendering elements
         //
@@ -384,7 +414,7 @@ public class UI_Inventory : MonoBehaviour
                     // new Item { itemType = item.itemType, amount = item.amount };
                     
                     _inventory.RemoveItem(item);
-                    ItemWorld.DropItem(_player.GetPosition(), duplicateItem, true);
+                    ItemWorld.DropItem(_player.GetPosition(), duplicateItem, false);
                     
                 };
 
@@ -510,7 +540,7 @@ public class UI_Inventory : MonoBehaviour
                 // new Item { itemType = item.itemType, amount = item.amount };
 
             _inventory.RemoveItem(item);
-            ItemWorld.DropItem(_player.GetPosition(), duplicateItem, true);
+            ItemWorld.DropItem(_player.GetPosition(), duplicateItem , false );
         };
 
         itemSlotRectTransform.anchoredPosition = uiSlot.GetComponent<RectTransform>().anchoredPosition;
@@ -654,8 +684,6 @@ public class UI_Inventory : MonoBehaviour
                 //
                 uiItem.RemoveUIItem( false );
                 
-                // ACA_QUEDE  REMOVE ITEM from GameObjcts in Unity Hierarchy
-
                 return true;
 
             }//End if (uiSlot.GetUI_Item() != null)
@@ -665,7 +693,6 @@ public class UI_Inventory : MonoBehaviour
                 // Error
                 //
                 Debug.LogError($"UI_Inventory ERROR: Cannot REMOVE UI_ITEM from UI_SLOT:  The UI_SLOT does not have any UI_ITEMs... already  empty\n\n In GUI (UI_Inventory: List<UI_Slot> _arrayOfSlot).\n\nThis GameObject is:= {this.name}", this);
-
                 
                 return false;
 

@@ -157,7 +157,29 @@ public class Inventory
 
     
     /// <summary>
-    /// Removes one Unit of: Item from Database. It: decreases the AMOUNT of that Item in the Database. 
+    /// Removes ONE (1) Unit of: Item from Database. It: decreases the AMOUNT of that Item in the Database. 
+    /// </summary>
+    /// <param name="myItemType"></param>
+    public void RemoveItem(Item.ItemType myItemType)
+    {
+        // CREATE a Fake Item... to do the search:
+        //
+        Item myFakeItem = new Item(); // CreateNewItem(myItemType, 1);
+        //
+        myFakeItem.SetAmount(1);
+        myFakeItem.SetItemType(myItemType);
+        
+        // Search for the Item, by TYPE  (its first appearance in Database will be deleted):
+        //
+        RemoveItem( myFakeItem );
+        
+    }// End RemoveItem()
+    
+    
+    /// <summary>
+    /// Removes "Item.GetAmount()" units of: Item(s) from Database. Searches for the ITEM BY matching its TYPE... in Database. It: decreases the AMOUNT of that Item in the Database, <br/><br/>.
+    ///
+    /// ...by checking the AMOUNT number of the INPUT Item  (and, if it reaches zero or lower: it would completely delete it). 
     /// </summary>
     /// <param name="item"></param>
     public void RemoveItem(Item item)
@@ -181,15 +203,15 @@ public class Inventory
                     // Found it
                     // Decrease (UPDATE) the amount  (could reach lower than zero)
                     //
-                    int itemAmount = item.GetAmount();
-                    itemAmount--;
-                    //
-                    inventoryItem.SetAmount( itemAmount );
+                    inventoryItem.SetAmount( inventoryItem.GetAmount() - item.GetAmount() );
                     itemInInventory = inventoryItem;
 
                     break;
                 }
-            }
+            }// End foreach
+            
+            // Now remove the ITEM:
+            //
             if (itemInInventory != null)
             {
 
@@ -197,7 +219,7 @@ public class Inventory
                 {
                     
                     // Remove it
-                    // AMOUNT Lower than zero: REMOVE IT from Database:
+                    // AMOUNT is  Lower than zero: REMOVE IT from Database:
                     //
                     _itemList.Remove(itemInInventory);
                 
@@ -249,7 +271,15 @@ public class Inventory
         return _itemList;
     }
 
-    public Item CreateNewItem(Item.ItemType myItemType, int myAmount)
+    /// <summary>
+    /// Encapsulates: the creation of a new Object, of "Item" type:
+    ///
+    /// <code>... = new Item() { id_ =, ... }</code>
+    /// </summary>
+    /// <param name="myItemType"></param>
+    /// <param name="myAmount"></param>
+    /// <returns></returns>
+    public Item CreateNewItem(Item.ItemType myItemType, int myAmount = 1)
     {
 
         // 1- Unique ID - Generate it:

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 /// <summary>
 /// GUI Code Behind: Item in GUI  (provisional name of GameObject:  "itemSlotTemplate(Clone)", ..., etc).
@@ -29,29 +30,9 @@ public class UI_Item : MonoBehaviour
 
     /// <summary>
     /// Links THIS (Component's references.. Dependency Injection):
-    /// UI_ITEM (Component) to a UI_Slot (Component)... given "Item" Data (fully initialized previously) as Input.
-    /// </summary>
-    /// <param name="item"></param>
-    /// <param name="uiSlot"></param>
-    public void AddUIItem(Item item, UI_Slot uiSlot)
-    {
-        this._item = item;
-        //
-        // Connections to UI_SLot
-        //   1- From UI_Item
-        //
-        this._uiSlot = uiSlot;
-            
-        //   2 From UI_Slot
-        //
-        uiSlot.SetUI_Item( this );
-    }
-    
-    /// <summary>
-    /// Links THIS (Component's references.. Dependency Injection):
     /// UI_ITEM (Component) to a UI_Slot (Component).
     /// </summary>
-    /// <param name="uiSlot"></param>
+    /// <param name="uiSlot">UI_Slot (Component). Code Behind Inventory Slots.</param>
     public void AddUIItem(UI_Slot uiSlot)
     {
         
@@ -111,6 +92,32 @@ public class UI_Item : MonoBehaviour
     {
         return this._uiSlot;
     }
+
+    
+    #region Obsolete
+    
+    /// <summary>
+    /// Links THIS (Component's references.. Dependency Injection):
+    /// UI_ITEM (Component) to a UI_Slot (Component)... given "Item" Data (fully initialized previously) as Input.
+    /// </summary>
+    /// <param name="item">"Item" Data (fully initialized previously) as Input.</param>
+    /// <param name="uiSlot">UI_Slot (Component). Code Behind Inventory Slots.</param>
+    [Obsolete("This method overload is tightly coupled (GUI vs Data).\nUse instead:\npublic void AddUIItem(UI_Slot uiSlot)")]
+    public void AddUIItem(Item item, UI_Slot uiSlot)
+    {
+        this._item = item;
+        //
+        // Connections to UI_SLot
+        //   1- From UI_Item
+        //
+        this._uiSlot = uiSlot;
+            
+        //   2 From UI_Slot
+        //
+        uiSlot.SetUI_Item( this );
+    }
+
+    #endregion Obsolete
     
     #endregion Methods
     

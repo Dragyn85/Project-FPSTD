@@ -43,6 +43,7 @@ public class ItemWorld : MonoBehaviour
     /// </summary>
     /// <param name="dropPosition"></param>
     /// <param name="item"></param>
+    /// <param name="dropJustOneUnitOfItem"></param>
     /// <returns></returns>
     public static ItemWorld DropItem(Vector3 dropPosition, Item item, bool dropJustOneUnitOfItem)
     {
@@ -51,11 +52,8 @@ public class ItemWorld : MonoBehaviour
             
             item.SetAmount( 1 );
         }
-        
-        Vector3 randomDir = UtilsClass.GetRandomDir();
-        ItemWorld itemWorld = SpawnItemWorld(dropPosition + randomDir * 8f, item);
-        itemWorld.GetComponent<Rigidbody2D>().AddForce(randomDir * 40f, ForceMode2D.Impulse);
-        return itemWorld;
+
+        return DropItem(dropPosition, item);
     }
 
 
