@@ -86,32 +86,105 @@ public class Inventory
 
             bool itemAlreadyInInventory = false;
 
-            foreach (Item inventoryItem in _itemList)
+            
+            #region Deprecated, old version: Foreach
+
+            // foreach (Item inventoryItem in _itemList)
+            // {
+            //
+            //     // "Item" already in Inventory
+            //     //
+            //     if (inventoryItem.GetItemType() == item.GetItemType())
+            //     {
+            //
+            //         // Add the Item as:  new Amount + previous Amount:
+            //         // New Item Amount:
+            //         //
+            //         int newItemAmount = item.GetAmount();
+            //         
+            //         // Total Amount: "New Item Amount" + "Previous Item Amount"
+            //         //
+            //         inventoryItem.SetAmount( inventoryItem.GetAmount() + newItemAmount );
+            //
+            //         itemAlreadyInInventory = true;
+            //         
+            //         // Trigger the Callback: Say that it is an AMOUNT UPDATE ("true") only:
+            //         //
+            //         OnItemListChangedAddedItem?.Invoke(true, item);
+            //         
+            //         break;
+            //     }
+            // }//End foreach
+
+            #endregion Deprecated, old version: Foreach
+            
+
+            #region Current code: Optimized version of FOR
+            
+
+            // Search for an previously added ITEM of the same TYPE in the Inventory (Database): 
+            //
+            int inventoryItemListLenght = _itemList.Count;
+            //
+            for (int i = 0; i < inventoryItemListLenght; i++)
             {
 
-                // "Item" already in Inventory
+                // Validation:
                 //
-                if (inventoryItem.GetItemType() == item.GetItemType())
+                if ( _itemList[ i ] != null )
                 {
+                    // Temporary var
+                    //
+                    Item auxInventoryItem = _itemList[ i ];
+                    
 
-                    // Add the Item as:  new Amount + previous Amount:
-                    // New Item Amount:
+                    // Is  "Item" (ItemType) already in Inventory ??
                     //
-                    int newItemAmount = item.GetAmount();
-                    
-                    // Total Amount: "New Item Amount" + "Previous Item Amount"
-                    //
-                    inventoryItem.SetAmount( inventoryItem.GetAmount() + newItemAmount );
+                    if (auxInventoryItem.GetItemType() == item.GetItemType())
+                    {
 
-                    itemAlreadyInInventory = true;
+                        // Add the Item as:  new Amount + previous Amount:
+                        // New Item Amount:
+                        //
+                        int newItemAmount = item.GetAmount();
                     
-                    // Trigger the Callback: Say that it is an AMOUNT UPDATE ("true") only:
+                        // Total Amount: "New Item Amount" + "Previous Item Amount"
+                        //
+                        auxInventoryItem.SetAmount( auxInventoryItem.GetAmount() + newItemAmount );
+
+                        itemAlreadyInInventory = true;
+                    
+                        // Trigger the Callback: Say that it is an AMOUNT UPDATE ("true") only:
+                        //
+                        OnItemListChangedAddedItem?.Invoke(true, item);
+                    
+                        break;
+                        
+                    }//End if (auxInventoryItem.GetItemType() == item.GetItemType())
+                    
+                }//End if ( _itemList[ i ] != null )
+                else
+                {
+                    
+                    // An ITEM is NULL:   Show some error message.
                     //
-                    OnItemListChangedAddedItem?.Invoke(true, item);
+                    Debug.LogError($"Inventory (Database) ERROR, on 'AddItem()':  There's an ITEM data unit in the Inventory List ( _itemList ) that is NULL, an empty shell...\n...I will fix it by removing it from the Inventory List now...\n\nThis Script is:= {this.GetType()}");
                     
-                    break;
-                }
-            }
+                    // Fix it:  remove the empty shell (ITEM that is NULL) from the Inventory database:
+                    //
+                    _itemList.RemoveAt( i );
+                    
+                }//End Validation: else of if ( _itemList[ i ] != null )
+                
+            }//End for
+            
+            #endregion Current code: Optimized version of FOR
+
+            
+            #region Apply Final Actions / Call delegates
+
+            // Check for any findings  ( Item(s) ):
+            //
             if (!itemAlreadyInInventory)
             {
 
@@ -152,7 +225,9 @@ public class Inventory
         }//End if (item.IsStackable())
         
         // Previous: OnItemListChanged?.Invoke(this, EventArgs.Empty);
-        //
+
+        #endregion Apply Final Actions / Call delegates
+        
     }// End AddItem()
 
     
@@ -192,25 +267,84 @@ public class Inventory
             //
             Item itemInInventory = null;
             
+            
+            #region Current code: Optimized For-loop
+            
             // Search for the ITEM  (by:  Item_Type: SWORD, HEALTH, COIN, ETC)
             //
-            foreach (Item inventoryItem in _itemList)
+            int itemListLenght = _itemList.Count;
+            //
+            for (int i = 0; i < itemListLenght; i++)
             {
                 
-                if (inventoryItem.GetItemType() == item.GetItemType())
-                {
-                    
-                    // Found it
-                    // Decrease (UPDATE) the amount  (could reach lower than zero)
-                    //
-                    inventoryItem.SetAmount( inventoryItem.GetAmount() - item.GetAmount() );
-                    itemInInventory = inventoryItem;
+                // Auxiliary variable to work with:
+                //
+                Item auxItemInInventory = _itemList[i];
+                
 
-                    break;
-                }
-            }// End foreach
+                // Validation
+                //
+                if (auxItemInInventory != null)
+                {
+
+                    // Valid search...
+                    //
+                    if (auxItemInInventory.GetItemType() == item.GetItemType())
+                    {
+                    
+                        // Found it
+                        // Decrease (UPDATE) the amount  (could reach lower than zero)
+                        //
+                        auxItemInInventory.SetAmount( auxItemInInventory.GetAmount() - item.GetAmount() );
+                        itemInInventory = auxItemInInventory;
+
+                        break;
+
+                    }//End if (inventoryItem.GetItemType() == item.GetItemType())
+
+                }//End if (auxItemInInventory != null)
+                else
+                {
+                    // An ITEM is NULL:   Show some error message.
+                    //
+                    Debug.LogError($"Inventory (Database) ERROR, on 'RemoveItem()':  There's an ITEM data unit in the Inventory List ( _itemList ) that is NULL, an empty shell...\n...I will fix it by removing it from the Inventory List now...\n\nThis Script is:= {this.GetType()}");
+                    
+                    // Fix it:  remove the empty shell (ITEM that is NULL) from the Inventory database  (to avoid future mishaps):
+                    //
+                    _itemList.RemoveAt( i );
+                    
+                }//End else of if (auxItemInInventory != null)
+                
+            }// End for
             
-            // Now remove the ITEM:
+            #endregion Current code: Optimized For-loop
+            
+            #region Deprecated code: Foreach 
+            
+            // // Search for the ITEM  (by:  Item_Type: SWORD, HEALTH, COIN, ETC)
+            // //
+            // foreach (Item inventoryItem in _itemList)
+            // {
+            //     
+            //     if (inventoryItem.GetItemType() == item.GetItemType())
+            //     {
+            //         
+            //         // Found it
+            //         // Decrease (UPDATE) the amount  (could reach lower than zero)
+            //         //
+            //         inventoryItem.SetAmount( inventoryItem.GetAmount() - item.GetAmount() );
+            //         itemInInventory = inventoryItem;
+            //
+            //         break;
+            //     }
+            // }// End foreach
+            
+            #endregion Deprecated code: Foreach
+            
+            
+            #region Apply Final Actions / Call delegates
+            
+            // Now remove the ITEM  found:
             //
             if (itemInInventory != null)
             {
@@ -257,6 +391,8 @@ public class Inventory
         }//End else of if (item.IsStackable())
         
         // Previous:   OnItemListChanged?.Invoke(this, EventArgs.Empty);
+
+        #endregion Apply Final Actions / Call delegates
 
     }// End RemoveItem()
 

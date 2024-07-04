@@ -260,17 +260,14 @@ public class UI_Inventory : MonoBehaviour
 
                 // Connect the newly added UI_ITEM to the rest of UI_SLOT and UI_Inventory
                 //
-                // RefreshUIInventoryUIItems(null, uiItem);
-                //
                 RefreshUIInventoryUIItemsAfterAddUIItem( uiItem );
 
             } //End if (myEmptyUISlot != null)
             else
             {
-                Debug.LogError(
-                    $"There's no EMPTY UI_SLOT in UI_INVENTORY... for ADDING one UI_ITEM.\n\nThis GameObject is:= {this.name}",
-                    this);
-            }
+                Debug.LogError($"There's no EMPTY UI_SLOT in UI_INVENTORY... for ADDING one UI_ITEM.\n\nThis GameObject is:= {this.name}", this);
+
+            }//End else of if (myEmptyUISlot != null)
 
         }//Else of if (addedTrueOrRemovedItemFalse)
 
@@ -317,7 +314,7 @@ public class UI_Inventory : MonoBehaviour
                 Debug.LogWarning($"There's no UI_ITEM (that belongs to Database ITEM = { myItem }...\n...with that ID = { myItem.GetItemID() })...\n...to REMOVE it from ( GUI UI_SLOT ), UI_INVENTORY....\n\nThis GameObject is:= {this.name}", this);
                 
 
-                // The Item ID was a fake one (which means, it was deleted from the GUI,
+                // The Item ID was a fake one (with ID = 0... which means, it was deleted from the GUI,
                 // ..by using  "UseAction()"  Delegate-callback).
                 // Resolution of the Exception:   Search the "Item GUI" (UI_ITEM) BY TYPE...
                 //...and remove THE FIRST ONE YOU FIND.
@@ -379,72 +376,174 @@ public class UI_Inventory : MonoBehaviour
     /// </summary>
     private void RefreshUIRendering()
     {
+        
+        #region Current, Optimized code: For-loop
 
-        foreach (UI_Slot uiSlot in _arrayOfSlot)
+        // Search for:  all Elements ( uiSlot(s) ) in "_arrayOfSlot"
+        //
+        int arrayOfSlotLenght = _arrayOfSlot.Count;
+        //
+        for (int i = 0; i < arrayOfSlotLenght; i++)
         {
-
-            // 1- Create new Item (as UI Element) on GUI.
-            // Refresh: Add some Delegate Functions:  for "Mouse Input Actions" (Right CLick, Left Click, etc). 
-            // ...and GUI
+            
+            // 0- Current  "UI_Slot"  studied:
             //
-            if (uiSlot.GetUI_Item() != null)
+            UI_Slot uiSlot = _arrayOfSlot[ i ];
+
+
+            // Validation
+            //
+            if (uiSlot != null)
             {
                 
-                // Item Data:
+                // 1- Create new Item (as UI Element) on GUI.
+                // Refresh: Add some Delegate Functions:  for "Mouse Input Actions" (Right CLick, Left Click, etc). 
+                // ...and GUI
                 //
-                Item item = uiSlot.GetUI_Item().GetItem();
-                
-                
-                // For this "Item", on its Slot:
-                // We refresh the ACTIONS (delegate functions) that the Item has,
-                // ..for each possible Button: Mouse Right CLick, Left Click, etc.
-                //
-                uiSlot.GetUI_Item().GetComponent<Button_UI>().ClickFunc = () =>
+                if (uiSlot.GetUI_Item() != null)
                 {
-                    // Use item
-                    _inventory.UseItem(item);
                     
-                };
-                uiSlot.GetUI_Item().GetComponent<Button_UI>().MouseRightClickFunc = () =>
-                {
-                    // Drop item
-                    //Item duplicateItem = new Item { itemType = item.itemType, amount = item.amount };
+                    // Item Data:
                     //
-                    Item duplicateItem = _inventory.CreateNewItem(item.GetItemType(), item.GetAmount());  
-                    // new Item { itemType = item.itemType, amount = item.amount };
+                    Item item = uiSlot.GetUI_Item().GetItem();
                     
-                    _inventory.RemoveItem(item);
-                    ItemWorld.DropItem(_player.GetPosition(), duplicateItem, false);
                     
-                };
+                    // For this "Item", on its Slot:
+                    // We refresh the ACTIONS (delegate functions) that the Item has,
+                    // ..for each possible Button: Mouse Right CLick, Left Click, etc.
+                    //
+                    uiSlot.GetUI_Item().GetComponent<Button_UI>().ClickFunc = () =>
+                    {
+                        // Use item
+                        _inventory.UseItem(item);
+                        
+                    };
+                    uiSlot.GetUI_Item().GetComponent<Button_UI>().MouseRightClickFunc = () =>
+                    {
+                        // Drop item
+                        //Item duplicateItem = new Item { itemType = item.itemType, amount = item.amount };
+                        //
+                        Item duplicateItem = _inventory.CreateNewItem(item.GetItemType(), item.GetAmount());  
+                        // new Item { itemType = item.itemType, amount = item.amount };
+                        
+                        _inventory.RemoveItem(item);
+                        ItemWorld.DropItem(_player.GetPosition(), duplicateItem, false);
+                        
+                    };
 
-                // Set the TextMeshPro UI Text on the GUI:
-                //
-                TextMeshProUGUI uiText = uiSlot.GetUI_Item().GetComponent<RectTransform>().Find("amountText").GetComponent<TextMeshProUGUI>();
-            
-                // If the amount of items reaches one (1): don't show any number (or hide the TextMeshProUI uiText Object).
-                //
-                if (item.GetAmount() > 1)
-                {
-                    uiText.SetText(item.GetAmount().ToString());
-                }
+                    // Set the TextMeshPro UI Text on the GUI:
+                    //
+                    TextMeshProUGUI uiText = uiSlot.GetUI_Item().GetComponent<RectTransform>().Find("amountText").GetComponent<TextMeshProUGUI>();
+                
+                    // If the amount of items reaches one (1): don't show any number (or hide the TextMeshProUI uiText Object).
+                    //
+                    if (item.GetAmount() > 1)
+                    {
+                        uiText.SetText(item.GetAmount().ToString());
+                    }
+                    else
+                    {
+                        uiText.SetText("");
+                    } 
+                    
+                }//End if (uiSlot.GetUI_Item() != null)
                 else
                 {
-                    uiText.SetText("");
-                } 
+                    // 2- There's no ITEMS in that UI_SLOT: empty
+                    //...Refresh colors of EMPTY UI_SLOTs
+                    //...REMOVE UI Elements (UI_ITEMS) that were in that Slot:
+                    // or Skip this:   if it was done already in another Method:  that's the case. OK!
+
+                }//End else of if (uiSlot.GetUI_Item() != null)
                 
-            }//End if (uiSlot.GetUI_Item() != null)
+            }//End if (uiSlot != null)
             else
             {
-                // 2- There's no ITEMS in that UI_SLOT: empty
-                //...Refresh colors of EMPTY UI_SLOTs
-                //...REMOVE UI Elements (UI_ITEMS) that were in that Slot:
-                // or Skip this:   if it was done already in another Method:  that's the case. OK!
+                
+                // An  "uiSlot"  is NULL  in the ArrayList:   Show some error message.
+                //
+                Debug.LogError($"Inventory (Database) ERROR, on 'RefreshUIRendering()':  There's an 'uiSlot' GUI unit in the SLOTS List<UI_SLOT> ( _arrayOfSlot ) that is NULL, an empty shell...\n...I will fix it by removing it from the GUI SLOTS List<UI_SLOT> List now...\n\nThis Script is:= {this.GetType()}", this);
+                    
+                // Fix it:  remove the empty shell (ITEM that is NULL) from the Inventory database  (to avoid future mishaps):
+                //
+                _arrayOfSlot.RemoveAt( i );
 
-            }//End else of if (uiSlot.GetUI_Item() != null)
+            }//End else of if (uiSlot != null)
             
         }//End For Each UI_Slot
 
+        #endregion Current, Optimized code: For-loop
+        
+
+        #region Deprecated code: Foreach
+        
+        // foreach (UI_Slot uiSlot in _arrayOfSlot)
+        // {
+        //
+        //     // 1- Create new Item (as UI Element) on GUI.
+        //     // Refresh: Add some Delegate Functions:  for "Mouse Input Actions" (Right CLick, Left Click, etc). 
+        //     // ...and GUI
+        //     //
+        //     if (uiSlot.GetUI_Item() != null)
+        //     {
+        //         
+        //         // Item Data:
+        //         //
+        //         Item item = uiSlot.GetUI_Item().GetItem();
+        //         
+        //         
+        //         // For this "Item", on its Slot:
+        //         // We refresh the ACTIONS (delegate functions) that the Item has,
+        //         // ..for each possible Button: Mouse Right CLick, Left Click, etc.
+        //         //
+        //         uiSlot.GetUI_Item().GetComponent<Button_UI>().ClickFunc = () =>
+        //         {
+        //             // Use item
+        //             _inventory.UseItem(item);
+        //             
+        //         };
+        //         uiSlot.GetUI_Item().GetComponent<Button_UI>().MouseRightClickFunc = () =>
+        //         {
+        //             // Drop item
+        //             //Item duplicateItem = new Item { itemType = item.itemType, amount = item.amount };
+        //             //
+        //             Item duplicateItem = _inventory.CreateNewItem(item.GetItemType(), item.GetAmount());  
+        //             // new Item { itemType = item.itemType, amount = item.amount };
+        //             
+        //             _inventory.RemoveItem(item);
+        //             ItemWorld.DropItem(_player.GetPosition(), duplicateItem, false);
+        //             
+        //         };
+        //
+        //         // Set the TextMeshPro UI Text on the GUI:
+        //         //
+        //         TextMeshProUGUI uiText = uiSlot.GetUI_Item().GetComponent<RectTransform>().Find("amountText").GetComponent<TextMeshProUGUI>();
+        //     
+        //         // If the amount of items reaches one (1): don't show any number (or hide the TextMeshProUI uiText Object).
+        //         //
+        //         if (item.GetAmount() > 1)
+        //         {
+        //             uiText.SetText(item.GetAmount().ToString());
+        //         }
+        //         else
+        //         {
+        //             uiText.SetText("");
+        //         } 
+        //         
+        //     }//End if (uiSlot.GetUI_Item() != null)
+        //     else
+        //     {
+        //         // 2- There's no ITEMS in that UI_SLOT: empty
+        //         //...Refresh colors of EMPTY UI_SLOTs
+        //         //...REMOVE UI Elements (UI_ITEMS) that were in that Slot:
+        //         // or Skip this:   if it was done already in another Method:  that's the case. OK!
+        //
+        //     }//End else of if (uiSlot.GetUI_Item() != null)
+        //     
+        // }//End For Each UI_Slot
+
+        #endregion Deprecated code: Foreach
+        
     }// End RefreshUIRendering()
 
 
@@ -710,83 +809,6 @@ public class UI_Inventory : MonoBehaviour
 
     #region Obsolete
     
-    /// <summary>
-    /// It Renders the GUI, whenever the "Data" changes in Inventory (because either: Someone ADDED or REMOVED an ITEM from the List Item,
-    ///...which is the Inventory Data-Logic itself).
-    /// </summary>
-    [Obsolete("Use the version with input-parameters: RefreshUIInventoryUIItems(UI_Item uiItem) instead.")]
-    private void RefreshInventoryItems()
-    {
-
-        // // Delete all the child-Objects of the "itemSlotContainer" (which is a RectTransform):
-        // // ...that are not an:   "itemSlotTemplate"
-        // //
-        // foreach (Transform child in _itemSlotContainer)
-        // {
-        //     if (child == itemSlotTemplate) continue;
-        //     
-        //     Destroy(child.gameObject);
-        // }
-        //
-        // int x = 0;
-        // int y = 0;
-        // float itemSlotCellSize = 75f;
-        //
-        // // 1- Render all Items (UI Elements) on GUI, together without empty Slots in the middle.
-        // // For that: Cycle with a for-loop through every  Item in Data (Inventory):
-        // //...then: Create (Instantiate) a set of GameObjects, which mean:  UI_SLOTS that are filled with those ITEMS.
-        // //...and: Add some Delegate Functions:  for "Mouse Input Actions" (Right CLick, Left Click, etc). 
-        // //
-        // foreach (Item item in _inventory.GetItemList())
-        // {
-        //     RectTransform itemSlotRectTransform = Instantiate(itemSlotTemplate, itemSlotContainer).GetComponent<RectTransform>();
-        //     itemSlotRectTransform.gameObject.SetActive(true);
-        //     
-        //     // For every Item, on every Slot:
-        //     // We refresh the ACTIONS (delegate functions) that the Item has,
-        //     // ..for each possible Button: Mouse Right CLick, Left Click, etc.
-        //     //
-        //     itemSlotRectTransform.GetComponent<Button_UI>().ClickFunc = () =>
-        //     {
-        //         // Use item
-        //         _inventory.UseItem(item);
-        //     };
-        //     itemSlotRectTransform.GetComponent<Button_UI>().MouseRightClickFunc = () =>
-        //     {
-        //         // Drop item
-        //         Item duplicateItem = new Item { itemType = item.itemType, amount = item.amount };
-        //         _inventory.RemoveItem(item);
-        //         ItemWorld.DropItem(_player.GetPosition(), duplicateItem);
-        //     };
-        //
-        //     itemSlotRectTransform.anchoredPosition = new Vector2(x * itemSlotCellSize, -y * itemSlotCellSize);
-        //     Image image = itemSlotRectTransform.Find("image").GetComponent<Image>();
-        //     image.sprite = item.GetSprite();
-        //
-        //     TextMeshProUGUI uiText = itemSlotRectTransform.Find("amountText").GetComponent<TextMeshProUGUI>();
-        //     
-        //     // If the amount of items reaches one (1): don't show any number (or hide the TextMeshProUI uiText Object).
-        //     //
-        //     if (item.amount > 1)
-        //     {
-        //         uiText.SetText(item.amount.ToString());
-        //     }
-        //     else
-        //     {
-        //         uiText.SetText("");
-        //     }
-        //
-        //     x++;
-        //     // Todo: Be careful with this Hard-code values:  Use attributes in the class instead
-        //     // ...(these are the UI dimensions of the Inventory UI). Rows = 2 = y, Columns = 4 = x.
-        //     //
-        //     if (x >= 4)
-        //     {
-        //         x = 0;
-        //         y++;
-        //     }
-        // }
-    }// End RefreshUIInventoryUIItems()
 
     #endregion Obsolete
     
