@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Priority:
     Enabled: 1
-    m_Value: 33
+    m_Value: 5
   OutputChannel: 1
   StandbyUpdate: 2
   m_StreamingVersion: 20230301
@@ -157,10 +157,15 @@ MonoBehaviour:
   rb: {fileID: 698940905466276851}
   cameraTransform: {fileID: 8332109707097096589}
   pitch: 0
-  mouseSensitivity: 3
+  mouseSensitivity: 0.1
   gunPointTransform: {fileID: 7109663141696434294}
   bulletPrefab: {fileID: 3301988813161053961, guid: 3a780a803f6306242addf771f4777d54, type: 3}
+  groundCheck: {fileID: 3050177294469779356}
   nextFireTime: 0
+  fpsMode: 1
+  godCameraController: {fileID: 0}
+  fireRate: 0.05
+  gunTransform: {fileID: 426194668354809530}
 --- !u!114 &3050177294469779356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,6 +178,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b5ddcfc87bd1f84981bb827e772260c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerCollider: {fileID: 7597224606805474953}
+  isGrounded: 0
+  distanceToGround: 0
+  velocity: 0
 --- !u!136 &7597224606805474953
 CapsuleCollider:
   m_ObjectHideFlags: 0

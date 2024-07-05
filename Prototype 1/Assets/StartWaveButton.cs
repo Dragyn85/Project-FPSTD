@@ -8,7 +8,7 @@ public class StartWaveButton : MonoBehaviour
     {
         GetComponent<Button>().onClick.AddListener(() =>
         {
-            var spawners = FindObjectsOfType<EnemySpawner>();
+            var spawners = FindObjectsOfType<SpawnManager>();
             foreach (var spawner in spawners)
             {
                 spawner.StartSpawning();

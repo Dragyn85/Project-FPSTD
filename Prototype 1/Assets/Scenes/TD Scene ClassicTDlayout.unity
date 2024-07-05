@@ -542,27 +542,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 664ce606b40c32549b666278eedd52d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &529990030 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 426194668354809530, guid: ba3940a79337c1d47ae6beab09f36199, type: 3}
-  m_PrefabInstance: {fileID: 1598249736}
-  m_PrefabAsset: {fileID: 0}
---- !u!136 &656433719 stripped
-CapsuleCollider:
-  m_CorrespondingSourceObject: {fileID: 7597224606805474953, guid: ba3940a79337c1d47ae6beab09f36199, type: 3}
-  m_PrefabInstance: {fileID: 1598249736}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &656433720 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3050177294469779356, guid: ba3940a79337c1d47ae6beab09f36199, type: 3}
-  m_PrefabInstance: {fileID: 1598249736}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b5ddcfc87bd1f84981bb827e772260c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &785250403
 GameObject:
   m_ObjectHideFlags: 0
@@ -1155,38 +1134,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3050177294469779356, guid: ba3940a79337c1d47ae6beab09f36199, type: 3}
-      propertyPath: playerCollider
-      value: 
-      objectReference: {fileID: 656433719}
-    - target: {fileID: 6697383927892383508, guid: ba3940a79337c1d47ae6beab09f36199, type: 3}
-      propertyPath: InputAction
-      value: 
-      objectReference: {fileID: -944628639613478452, guid: 3830376b39908c54caf1d301fa62570b, type: 3}
-    - target: {fileID: 6697383927892383508, guid: ba3940a79337c1d47ae6beab09f36199, type: 3}
-      propertyPath: groundCheck
-      value: 
-      objectReference: {fileID: 656433720}
-    - target: {fileID: 6697383927892383508, guid: ba3940a79337c1d47ae6beab09f36199, type: 3}
-      propertyPath: gunTransform
-      value: 
-      objectReference: {fileID: 529990030}
-    - target: {fileID: 6697383927892383508, guid: ba3940a79337c1d47ae6beab09f36199, type: 3}
-      propertyPath: mouseSensitivity
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6697383927892383508, guid: ba3940a79337c1d47ae6beab09f36199, type: 3}
-      propertyPath: InputAction.m_Name
-      value: Input
-      objectReference: {fileID: 0}
     - target: {fileID: 6697383927892383508, guid: ba3940a79337c1d47ae6beab09f36199, type: 3}
       propertyPath: godCameraController
       value: 
       objectReference: {fileID: 2075697846}
-    - target: {fileID: 8090919785355743212, guid: ba3940a79337c1d47ae6beab09f36199, type: 3}
-      propertyPath: Priority.m_Value
-      value: 5
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
