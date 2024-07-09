@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class SpawnManager : MonoBehaviour
     {
         spawningActive = true;
         currentWave = waveQueue.Dequeue();
+        currentWave.StartWave();
         nextWaveStartTime = Time.time + currentWave.WaveDelay;
         currentWave.OnWaveComplete += OnWaveComplete;
     }
@@ -41,6 +43,7 @@ public class SpawnManager : MonoBehaviour
         else
         {
             currentWave = waveQueue.Dequeue();
+            currentWave.StartWave();
             nextWaveStartTime = Time.time + currentWave.WaveDelay;
             currentWave.OnWaveComplete += OnWaveComplete;
         }
@@ -96,7 +99,7 @@ public class Wave
             currentPulses = enemyPulseQueue.Dequeue();
             foreach (var pulse in currentPulses)
             {
-                pulse.OnPulseComplete += OnPulseComplete;
+                //pulse.OnPulseComplete += OnPulseComplete;
             }
         }
     }
@@ -117,6 +120,20 @@ public class Wave
         foreach (var pulse in currentPulses)
         {
             pulse.Tick(deltaTime);
+        }
+        bool isComplete = true;
+        foreach (var pulse in currentPulses)
+        {
+            if (!pulse.IsComplete)
+            {
+                isComplete = false;
+                break;
+            }
+        }
+
+        if (isComplete)
+        {
+            StartNextPulse();
         }
     }
 }
@@ -140,6 +157,8 @@ public class EnemyPulse
 
     private bool spawnEnemys = true;
     private float nextSpawnTime = 0;
+    
+    public bool IsComplete => amountToSpawn <= 0;
 
     public void StartSpawning()
     {
@@ -153,14 +172,17 @@ public class EnemyPulse
         if (Time.time >= nextSpawnTime)
         {
             nextSpawnTime = Time.time + spawnInterval;
-            GameObject enemy = GameObject.Instantiate(enemyPrefab);
-            enemy.transform.position = spawnAreas.GetSpawnPosition();
+            
+            var pos = NavMesh.SamplePosition(spawnAreas.GetSpawnPosition(),out NavMeshHit hit,  3, NavMesh.AllAreas);
+            GameObject enemy = GameObject.Instantiate(enemyPrefab, hit.position, Quaternion.identity);
+            //enemy.transform.position = hit.position;
+            Debug.Log($"Spawned at {spawnAreas.name} spawn area {spawnAreas.GetSpawnPosition()} enemy pos {enemy.transform.position}");
             amountToSpawn--;
             if (amountToSpawn <= 0)
             {
                 spawnEnemys = false;
                 Debug.Log("Pulse Completet");
-                OnPulseComplete?.Invoke(this);
+                //OnPulseComplete?.Invoke(this);
             }
         }
     }
