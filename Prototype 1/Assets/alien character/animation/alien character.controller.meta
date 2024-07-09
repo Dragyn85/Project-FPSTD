@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 016e205a34300fb4b89029b56c37edac
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 20838
+  packageName: Alien Character
+  packageVersion: 4.3.4
+  assetPath: Assets/alien character/animation/alien character.controller
+  uploadId: 10024

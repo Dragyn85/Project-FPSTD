@@ -213,6 +213,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 8973096475756339988}
   damage: 10
+  launchForce: 20
 --- !u!54 &8973096475756339988
 Rigidbody:
   m_ObjectHideFlags: 0

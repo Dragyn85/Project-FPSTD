@@ -30,7 +30,7 @@ public class GuardTower : MonoBehaviour
 
 
         // Face the target
-        transform.LookAt(target.transform.position);
+        transform.LookAtOnXZ(target.transform.position);
 
         if (CanAttack())
         {
@@ -50,12 +50,13 @@ public class GuardTower : MonoBehaviour
         }
         
         if (Time.time > nextAttackTime 
-            && Physics.Raycast(gunPointTransform.position, 
-                (target.transform.position - gunPointTransform.position).normalized,
-                out RaycastHit hit, radius)
+            //&& Physics.Raycast(gunPointTransform.position, 
+              //  (target.transform.position - gunPointTransform.position).normalized,
+                //out RaycastHit hit, radius)
             && Vector3.Distance(transform.position, target.transform.position) < radius)
         {
-            if (hit.transform == target)
+            return true;
+            //if (hit.transform == target)
             {
                 return true;
             }
@@ -66,7 +67,7 @@ public class GuardTower : MonoBehaviour
 
     private void Shoot()
     {
-        Instantiate(bulletPrefab, gunPointTransform.position, gunPointTransform.rotation);
+        Instantiate(bulletPrefab, gunPointTransform.position, gunPointTransform.GetRotationTowards(target.transform.position+Vector3.up*1.5f));
         nextAttackTime = Time.time + attackSpeed;
     }
 
@@ -82,11 +83,11 @@ public class GuardTower : MonoBehaviour
 
         if (colliders.Length > 0)
         {
-            colliders = colliders.OrderBy(t => Vector3.Distance(t.transform.position, playerBase.position)).ToArray();
+            var sortedColliders = colliders.OrderBy(t => Vector3.Distance(t.transform.position, playerBase.position));
 
-            foreach (var collider in colliders)
+            foreach (var collider in sortedColliders)
             {
-                if (collider.TryGetComponent<IDamagable>(out var damagable))
+                if (collider.TryGetComponent<Health>(out var damagable))
                 {
                     target = collider.transform.GetComponent<Health>();
                     break;
@@ -94,4 +95,21 @@ public class GuardTower : MonoBehaviour
             }
         }
     }
+}
+
+public static class TransformExtensions{
+
+    public static void LookAtOnXZ(this Transform transform, Vector3 target)
+    {
+        Vector3 direction = target - transform.position;
+        direction.y = 0;
+        transform.rotation = Quaternion.LookRotation(direction);
+    }
+    
+    public static Quaternion GetRotationTowards(this Transform transform, Vector3 target)
+    {
+        Vector3 direction = target - transform.position;
+        
+        return Quaternion.LookRotation(direction);
+    } 
 }
