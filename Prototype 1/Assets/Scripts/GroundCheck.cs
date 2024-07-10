@@ -1,27 +1,43 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
 public class GroundCheck : MonoBehaviour
 {
-    public bool IsGrounded { get; private set; }
-    Rigidbody rb;
+    [SerializeField] Collider playerCollider;
+    [SerializeField] bool isGrounded;
 
+
+    private Rigidbody rb;
+    private Vector3 offset;
+    private float slope;
+    
+    public float Slope => slope;
+    public bool IsGrounded => isGrounded;
+
+    public float distanceToGround;
+    public float velocity;
     private void Awake()
     {
+        var bounds = playerCollider.bounds;
+        offset = new Vector3(0,-bounds.size.y/2+0.01f,0);
         rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
-        Ray ray = new Ray(transform.position, Vector3.down);
-        if (Physics.Raycast(ray, 0.4f) && rb.linearVelocity.y <= 0.1f)
+        Ray ray = new Ray(transform.position+offset, Vector3.down);
+        RaycastHit hit;
+        if (Physics.Raycast(ray,out hit,0.3f) && rb.linearVelocity.y <= 4f)
         {
-            IsGrounded = true;
+            distanceToGround = hit.distance;
+            slope = Vector3.Angle(hit.normal, transform.forward)-90;
+            isGrounded = true;
+            velocity = rb.linearVelocity.y;
         }
         else
         {
-            IsGrounded = false;
+            isGrounded = false;
+            velocity = rb.linearVelocity.y;
         }
     }
 }

@@ -10,7 +10,8 @@ public class GuardTower : MonoBehaviour
     float nextAttackTime = 0;
 
     Transform playerBase;
-    Transform target;
+    Health target;
+    [SerializeField] float attackSpeed = 0.2f;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform gunPointTransform;
 
@@ -29,7 +30,7 @@ public class GuardTower : MonoBehaviour
 
 
         // Face the target
-        transform.LookAt(target.position);
+        transform.LookAtOnXZ(target.transform.position);
 
         if (CanAttack())
         {
@@ -47,16 +48,15 @@ public class GuardTower : MonoBehaviour
         {
             return false;
         }
-
-        if (Vector3.Distance(transform.position, target.position) < radius && Time.time > nextAttackTime)
+        
+        if (Time.time > nextAttackTime 
+            //&& Physics.Raycast(gunPointTransform.position, 
+              //  (target.transform.position - gunPointTransform.position).normalized,
+                //out RaycastHit hit, radius)
+            && Vector3.Distance(transform.position, target.transform.position) < radius)
         {
             return true;
-        }
-
-        if (Physics.Raycast(gunPointTransform.position, (target.position - gunPointTransform.position).normalized,
-                out RaycastHit hit, radius))
-        {
-            if (hit.transform == target)
+            //if (hit.transform == target)
             {
                 return true;
             }
@@ -67,8 +67,8 @@ public class GuardTower : MonoBehaviour
 
     private void Shoot()
     {
-        Instantiate(bulletPrefab, gunPointTransform.position, gunPointTransform.rotation);
-        nextAttackTime = Time.time + 0.5f;
+        Instantiate(bulletPrefab, gunPointTransform.position, gunPointTransform.GetRotationTowards(target.transform.position+Vector3.up*1.5f));
+        nextAttackTime = Time.time + attackSpeed;
     }
 
     private void UpdateTargets()
@@ -83,16 +83,33 @@ public class GuardTower : MonoBehaviour
 
         if (colliders.Length > 0)
         {
-            colliders = colliders.OrderBy(t => Vector3.Distance(t.transform.position, playerBase.position)).ToArray();
+            var sortedColliders = colliders.OrderBy(t => Vector3.Distance(t.transform.position, playerBase.position));
 
-            foreach (var collider in colliders)
+            foreach (var collider in sortedColliders)
             {
-                if (collider.TryGetComponent<IDamagable>(out var damagable))
+                if (collider.TryGetComponent<Health>(out var damagable))
                 {
-                    target = collider.transform;
+                    target = collider.transform.GetComponent<Health>();
                     break;
                 }
             }
         }
     }
+}
+
+public static class TransformExtensions{
+
+    public static void LookAtOnXZ(this Transform transform, Vector3 target)
+    {
+        Vector3 direction = target - transform.position;
+        direction.y = 0;
+        transform.rotation = Quaternion.LookRotation(direction);
+    }
+    
+    public static Quaternion GetRotationTowards(this Transform transform, Vector3 target)
+    {
+        Vector3 direction = target - transform.position;
+        
+        return Quaternion.LookRotation(direction);
+    } 
 }

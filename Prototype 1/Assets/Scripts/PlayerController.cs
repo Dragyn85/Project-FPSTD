@@ -1,12 +1,12 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Random = UnityEngine.Random;
 
 public class PlayerController : MonoBehaviour
 {
     public float runSpeed = 4.0f;
     public Rigidbody rb;
-
 
     public Transform cameraTransform;
     public float pitch;
@@ -14,12 +14,19 @@ public class PlayerController : MonoBehaviour
 
     public Transform gunPointTransform;
     public Bullet bulletPrefab;
+    public GroundCheck groundCheck;
     public float nextFireTime;
 
     public bool fpsMode = true;
     private PlayerInputs playerInputs;
 
     [SerializeField] GodCameraController godCameraController;
+    [SerializeField] float fireRate = 0.05f;
+    
+    Quaternion startRotation;
+    [SerializeField] Transform gunTransform;
+
+    private bool shouldJump;
 
     //[SerializeField] InputActionAsset InputAction;
     void Start()
@@ -28,6 +35,8 @@ public class PlayerController : MonoBehaviour
         
         playerInputs.GodMode.SetCallbacks(godCameraController);
 
+        startRotation = transform.localRotation;
+        
         godCameraController.SetInputs(playerInputs);
         playerInputs.FPS.Enable();
         rb = GetComponent<Rigidbody>();
@@ -41,6 +50,35 @@ public class PlayerController : MonoBehaviour
         HandleMovement(playerInputs.FPS.Move.ReadValue<Vector2>());
         HandleMouseLook(playerInputs.FPS.Look.ReadValue<Vector2>());
         HandleShooting();
+        HandleJump();
+        HandleGunShake();
+        //HandleGodMode();
+    }
+
+    private void HandleGunShake()
+    {
+        gunTransform.localRotation = Quaternion.Slerp(gunTransform.localRotation, startRotation, Time.deltaTime * 5);
+    }
+
+    private void FixedUpdate()
+    {
+        if (shouldJump)
+        {
+            rb.AddForce(Vector3.up * 15, ForceMode.Impulse);
+            shouldJump = false;
+        }
+    }
+
+    private void HandleJump()
+    {
+        if(playerInputs.FPS.Jump.triggered && groundCheck.IsGrounded)
+        {
+            shouldJump = true;
+        }
+    }
+
+    private void HandleGodMode()
+    {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             fpsMode = !fpsMode;
@@ -65,10 +103,26 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButton(0) && Time.time > nextFireTime)
         {
-            nextFireTime = Time.time + 0.5f;
+            nextFireTime = Time.time + fireRate;
 
             Instantiate(bulletPrefab, gunPointTransform.position, gunPointTransform.rotation);
+            float recoileForce = 3;
+            AddRandomRecoil(recoileForce);
         }
+    }
+
+    private void AddRandomRecoil(float recoileForce)
+    {
+        var sideWayRecoil = recoileForce / 3;
+        // Generate a random rotation amount within a range
+        float randomXRotation = Random.Range(-recoileForce, 0);
+        float randomZRotation = Random.Range(-sideWayRecoil, sideWayRecoil);
+
+        // Create a rotation based on the random Euler angles
+        Quaternion recoilRotation = Quaternion.Euler(randomXRotation, 0, randomZRotation);
+
+        // Apply the recoil rotation to the gunTransform
+        gunTransform.localRotation *= recoilRotation;
     }
 
     private void HandleMouseLook(Vector2 inputs)

@@ -45,6 +45,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""06602687-8c1b-4c11-b347-3758b618f0fd"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -135,6 +144,17 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3d1f63fa-d175-433f-a7a8-9f5fc4c691dc"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -184,6 +204,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_FPS = asset.FindActionMap("FPS", throwIfNotFound: true);
         m_FPS_Look = m_FPS.FindAction("Look", throwIfNotFound: true);
         m_FPS_Move = m_FPS.FindAction("Move", throwIfNotFound: true);
+        m_FPS_Jump = m_FPS.FindAction("Jump", throwIfNotFound: true);
         // God Mode
         m_GodMode = asset.FindActionMap("God Mode", throwIfNotFound: true);
         m_GodMode_Move = m_GodMode.FindAction("Move", throwIfNotFound: true);
@@ -256,12 +277,14 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private List<IFPSActions> m_FPSActionsCallbackInterfaces = new List<IFPSActions>();
     private readonly InputAction m_FPS_Look;
     private readonly InputAction m_FPS_Move;
+    private readonly InputAction m_FPS_Jump;
     public struct FPSActions
     {
         private @PlayerInputs m_Wrapper;
         public FPSActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @Look => m_Wrapper.m_FPS_Look;
         public InputAction @Move => m_Wrapper.m_FPS_Move;
+        public InputAction @Jump => m_Wrapper.m_FPS_Jump;
         public InputActionMap Get() { return m_Wrapper.m_FPS; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -277,6 +300,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @Jump.started += instance.OnJump;
+            @Jump.performed += instance.OnJump;
+            @Jump.canceled += instance.OnJump;
         }
 
         private void UnregisterCallbacks(IFPSActions instance)
@@ -287,6 +313,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @Jump.started -= instance.OnJump;
+            @Jump.performed -= instance.OnJump;
+            @Jump.canceled -= instance.OnJump;
         }
 
         public void RemoveCallbacks(IFPSActions instance)
@@ -354,6 +383,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     {
         void OnLook(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
     }
     public interface IGodModeActions
     {
