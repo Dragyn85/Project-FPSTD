@@ -1,4 +1,5 @@
 using System;
+using com.davidhopetech.core.Run_Time.Extensions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -95,9 +96,9 @@ public class PlayerController : MonoBehaviour
 
         var inputMovement = (transform.forward * vertical + transform.right * horizontal)
                             * (runSpeed * (Input.GetKey(KeyCode.LeftShift) ? 2 : 1));
-        var newVelocity = new Vector3(inputMovement.x, rb.linearVelocity.y, inputMovement.z);
+        var newVelocity = new Vector3(inputMovement.x, rb.GetVelocity().y, inputMovement.z);
 
-        rb.linearVelocity = newVelocity;
+        rb.SetVelocty(newVelocity);
     }
 
 

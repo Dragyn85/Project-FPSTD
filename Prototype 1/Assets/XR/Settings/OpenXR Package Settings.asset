@@ -156,7 +156,6 @@ MonoBehaviour:
   - {fileID: 8358747060051089534}
   - {fileID: 6795799321678377295}
   - {fileID: -2004935553517456630}
-  - {fileID: -5101656866872940476}
   - {fileID: 519335743282805879}
   - {fileID: -1859208851739341298}
   - {fileID: -5561876627435481688}
@@ -174,7 +173,6 @@ MonoBehaviour:
   m_depthSubmissionMode: 0
   m_optimizeBufferDiscards: 0
   m_symmetricProjection: 0
-  m_foveatedRenderingApi: 0
 --- !u!114 &-7000327625014453165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,7 +189,6 @@ MonoBehaviour:
   - {fileID: 6487348629701793391}
   - {fileID: -88722551143226278}
   - {fileID: 7643570408755159586}
-  - {fileID: 8666248678923898192}
   - {fileID: 5419938503151011727}
   - {fileID: 3340245187087869715}
   - {fileID: -7629424926311422712}
@@ -210,7 +207,6 @@ MonoBehaviour:
   m_depthSubmissionMode: 0
   m_optimizeBufferDiscards: 0
   m_symmetricProjection: 0
-  m_foveatedRenderingApi: 0
 --- !u!114 &-6592271764912318267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -370,7 +366,6 @@ MonoBehaviour:
   m_depthSubmissionMode: 0
   m_optimizeBufferDiscards: 0
   m_symmetricProjection: 0
-  m_foveatedRenderingApi: 0
 --- !u!114 &-5101656866872940476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -787,7 +782,6 @@ MonoBehaviour:
   m_depthSubmissionMode: 0
   m_optimizeBufferDiscards: 0
   m_symmetricProjection: 0
-  m_foveatedRenderingApi: 0
 --- !u!114 &1615720939029224156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -885,7 +879,6 @@ MonoBehaviour:
   - {fileID: 4254239552289259214}
   - {fileID: 5789102966386051915}
   - {fileID: -2680092676759183064}
-  - {fileID: -5947636205890282713}
   - {fileID: -8848184170925415419}
   - {fileID: -6129426141798663868}
   - {fileID: 1615720939029224156}
@@ -902,7 +895,6 @@ MonoBehaviour:
   m_depthSubmissionMode: 0
   m_optimizeBufferDiscards: 0
   m_symmetricProjection: 0
-  m_foveatedRenderingApi: 0
 --- !u!114 &3264685049186538380
 MonoBehaviour:
   m_ObjectHideFlags: 0
