@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
 
         startRotation = transform.localRotation;
         
-        godCameraController.SetInputs(playerInputs);
+        //godCameraController.SetInputs(playerInputs);
         playerInputs.FPS.Enable();
         rb = GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
